@@ -1,5 +1,8 @@
-# Shelf
-https://shelf.adaptable.app/main/ <br>
+### Shelf
+---
+#### Creator: Abbilhaidar Farras Zulfikar
+#### Students ID: 2206026012
+#### Link: https://shelf.adaptable.app/main/ <br>
 ---
 ### Pertanyaan untuk Tugas 2
 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
@@ -74,5 +77,7 @@ https://shelf.adaptable.app/main/ <br>
      ```
      Jika ada tulisan OK di bawah maka test berhasil dan selesai sudah
 2. Buatlah bagan yang berisi request client ke web aplikasi berbasis Django beserta responnya dan jelaskan pada bagan tersebut kaitan antara urls.py, views.py, models.py, dan berkas html. <br>
+![Django Architecture](https://github.com/Abbilville/Shelf/assets/119837732/4f7e25a9-3115-43b5-a672-77b51e2ddb38)
+
 3. Jelaskan mengapa kita menggunakan virtual environment? Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment? <br>
 4. Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya. <br>
