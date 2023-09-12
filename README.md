@@ -80,4 +80,21 @@
 ![Django Architecture](https://github.com/Abbilville/Shelf/assets/119837732/4f7e25a9-3115-43b5-a672-77b51e2ddb38 "Django Architecture_AbbilhaidarFarrasZulfikar_2206026012")
 
 3. Jelaskan mengapa kita menggunakan virtual environment? Apakah kita tetap dapat membuat aplikasi web berbasis Django tanpa menggunakan virtual environment? <br>
-4. Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya. <br>
+&nbsp;&nbsp;&nbsp;&nbsp; Virtual environment diperlukan sebab kita tidak ingin project yang sedang kita kerjakan 'bertabrakan' dengan project yang lain entah itu packagesnya atau dependenciesnya sehingga projectnya akan menjadi lebih aman. <br>
+&nbsp;&nbsp;&nbsp;&nbsp; Ya, kita tetap bisa membuat aplikasi web berbasis Django walaupun tanpa menggunakan virtual environment, tapi hal ini sangat tidak direkomendasikan karena bisa saja terjadi error yang tidak diinginkan seperti ketidaksesuaian versi packages yang digunakan dan lain-lain.
+
+4. Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya! <br>
+   + **MVC (Model-View-Controller)** <br>
+   + **MVT (Model-View-Template)** <br>
+   + **MVVM (Model-View-ViewModel)** <br>
+
+Perbedaan
+|MVC|MVT|MVVM|
+|---|---|---|
+|asd|asd|asd|
+
+---
+## References
+1. [Django Architecture](https://data-flair.training/blogs/django-architecture/ "Data Flair")
+2. [Python Virtual Environment](https://www.geeksforgeeks.org/python-virtual-environment/ "GeeksForGeeks")
+3. [Difference between MVC, MVP, and MVVM Architecture Pattern in Android](https://www.geeksforgeeks.org/difference-between-mvc-mvp-and-mvvm-architecture-pattern-in-android/ "GeeksForGeeks")
