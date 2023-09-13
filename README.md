@@ -85,16 +85,21 @@
 
 4. Jelaskan apakah itu MVC, MVT, MVVM dan perbedaan dari ketiganya! <br>
    + **MVC (Model-View-Controller)** <br>
+     MVC merupakan konsep architecture yang digunakan untuk mengimplementasikan interface pengguna dan memfokuskan pada pemisahan representasi data dari komponen-komponen yang berinteraksi atau memproses data.
    + **MVT (Model-View-Template)** <br>
+     MVT merupakan konsep architecture yang mirip dengan MVC namun Controller sudah diurus oleh framework yang kita gunakan, dalam hal ini maka Controller sudah diurus oleh Django.
    + **MVVM (Model-View-ViewModel)** <br>
+     MVVM merupakan konsep architecture yang terstruktur untuk memisahkan logika program dengan control interface pengguna.
+     
 
-Perbedaan
 |MVC|MVT|MVVM|
 |---|---|---|
-|asd|asd|asd|
+|Web applications, desktop applications, GUI-based apps|Web applications, Django framework (Python)|Modern single-page web apps|
+|Controller: Menerima input user dan memanipulasi Model/View sesuai kebutuhan|Template: Menentukan cara data ditampilkan dalam View.|ViewModel: Menjadi media antara Model dan View, menangani input user, dan menghandle data untuk ditampilkan.|
 
 ---
 ## References
 1. [Django Architecture](https://data-flair.training/blogs/django-architecture/ "Data Flair")
 2. [Python Virtual Environment](https://www.geeksforgeeks.org/python-virtual-environment/ "GeeksForGeeks")
-3. [Difference between MVC, MVP, and MVVM Architecture Pattern in Android](https://www.geeksforgeeks.org/difference-between-mvc-mvp-and-mvvm-architecture-pattern-in-android/ "GeeksForGeeks")
+3. [Difference between MVC and MVT design patterns](https://www.geeksforgeeks.org/difference-between-mvc-and-mvt-design-patterns/ "GeekForGeeks")
+4. [MVC, MVP, MVVM: Which One to Choose?](https://www.makeuseof.com/mvc-mvp-mvvm-which-choose/ "MakeUsOf")
