@@ -1,8 +1,9 @@
-### Shelf
+# Shelf
+### An online shopping website 
 ---
 #### Creator: Abbilhaidar Farras Zulfikar
 #### Students ID: 2206026012
-#### Link: https://shelf.adaptable.app/main/ <br>
+#### Link: https://shelf.adaptable.app/main/
 ---
 ### Pertanyaan untuk Tugas 2
 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
@@ -98,8 +99,23 @@
 |Controller: Menerima input user dan memanipulasi Model/View sesuai kebutuhan|Template: Menentukan cara data ditampilkan dalam View.|ViewModel: Menjadi media antara Model dan View, menangani input user, dan menghandle data untuk ditampilkan.|
 
 ---
+### Pertanyaan untuk Tugas 3
+1.  Apa perbedaan antara form POST dan form GET dalam Django?
+    
+2.  Apa perbedaan utama antara XML, JSON, dan HTML dalam konteks pengiriman data?
+    
+3.  Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
+    
+4.  Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+
+5.  Akses kelima URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman
+    
+---
 ## References
 1. [Django Architecture](https://data-flair.training/blogs/django-architecture/ "Data Flair")
 2. [Python Virtual Environment](https://www.geeksforgeeks.org/python-virtual-environment/ "GeeksForGeeks")
 3. [Difference between MVC and MVT design patterns](https://www.geeksforgeeks.org/difference-between-mvc-and-mvt-design-patterns/ "GeekForGeeks")
 4. [MVC, MVP, MVVM: Which One to Choose?](https://www.makeuseof.com/mvc-mvp-mvvm-which-choose/ "MakeUsOf")
+5. [Working with Forms](https://docs.djangoproject.com/en/4.2/topics/forms/ "DjangoProject")
+6. [What’s the Relationship Between XML, JSON, HTML and the Internet?](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet "DeltaXML")
+7. [XML Vs JSON: Which Is The Better Data Transfer Format?](https://openxmldeveloper.org/xml-vs-json-which-is-the-better-data-transfer-format/ "OpenXMLDeveloper")
