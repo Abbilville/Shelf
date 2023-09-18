@@ -101,7 +101,23 @@
 ---
 ### Pertanyaan untuk Tugas 3
 1.  Apa perbedaan antara form POST dan form GET dalam Django?
+    Form POST dan form GET merupakan method pada HTTP ketika kita sedang berurusan dengan form. <br> <br>
+    POST method membuat browser mengemas data form, meng-encode datanya untuk ditransmisikan, mengirimkannya ke server, dan kemudian menerima responnya kembali. <br> <br>
+    GET method membuat browser mengemas data yang disubmit menjadi string, dan menggunakannya untuk menghasilkan URL. The URL berisi alamat di mana data harus dikirim. <br> <br>
+    Untuk lebih jelasnya, berikut perbedaan POST dan GET yang saya ambil dari web [W3Schools](https://www.w3schools.com/tags/ref_httpmethods.asp "W3Schools") <br>
     
+|Type|POST|GET|
+|---|---|---|
+|Tombol kembali / Reload|Data akan disubmit ulang (Browser memperingatkan pengguna bahwa datanya akan disubmit ulang)|Tidak berbahaya|
+|Bookmarked|Tidak bisa dibookmarked|Bisa dibookmarked|
+|Cached|Tidak dicached|Bisa dicached|
+|Tipe Encoding|application/x-www-form-urlencoded or multipart/form-data. Use multipart encoding for binary data|application/x-www-form-urlencoded|
+|History|Parameters are not saved in browser history|Parameters remain in browser history|
+|Restrictions on data length|No restrictions|Yes, when sending data, the GET method adds the data to the URL; and the length of a URL is limited (maximum URL length is 2048 characters)|
+|Restrictions on data type|No restrictions. Binary data is also allowed|Only ASCII characters allowed|
+|Security|GET is less secure compared to POST because data sent is part of the URL <br> Never use GET when sending passwords or other sensitive information!|POST is a little safer than GET because the parameters are not stored in browser history or in web server logs|
+|Visibility|Data is not displayed in the URL|Data is visible to everyone in the URL|
+
 2.  Apa perbedaan utama antara XML, JSON, dan HTML dalam konteks pengiriman data?
     
 3.  Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
@@ -117,5 +133,6 @@
 3. [Difference between MVC and MVT design patterns](https://www.geeksforgeeks.org/difference-between-mvc-and-mvt-design-patterns/ "GeekForGeeks")
 4. [MVC, MVP, MVVM: Which One to Choose?](https://www.makeuseof.com/mvc-mvp-mvvm-which-choose/ "MakeUsOf")
 5. [Working with Forms](https://docs.djangoproject.com/en/4.2/topics/forms/ "DjangoProject")
-6. [What’s the Relationship Between XML, JSON, HTML and the Internet?](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet "DeltaXML")
-7. [XML Vs JSON: Which Is The Better Data Transfer Format?](https://openxmldeveloper.org/xml-vs-json-which-is-the-better-data-transfer-format/ "OpenXMLDeveloper")
+6. [HTTP Request Methods](https://www.w3schools.com/tags/ref_httpmethods.asp "W3Schools")
+7. [What’s the Relationship Between XML, JSON, HTML and the Internet?](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet "DeltaXML")
+8. [XML Vs JSON: Which Is The Better Data Transfer Format?](https://openxmldeveloper.org/xml-vs-json-which-is-the-better-data-transfer-format/ "OpenXMLDeveloper")
