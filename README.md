@@ -39,7 +39,7 @@
      Maka akan terbentuk folder baru yang bernama `main` dan isinya kumpulan file yang muncul saat pertama kali membuat django app.
    + Jangan lupa, setiap membuat aplikasi, daftarkan aplikasi tersebut ke dalam `INSTALLED_APPS` yang ada pada file `settings.py` di direktori utama (direktori project)
      
-     ```
+     ```python
      INSTALLED_APPS = [
      ...,
      'main',
@@ -57,7 +57,7 @@
    + Selanjutnya pergi ke file `views.py` dan import `render` kedalamnya agar dapat menghubungkan `templates` dengan data yang ada di `views` seperti [ini](https://github.com/Abbilville/Shelf/blob/main/main/views.py)
    + Langkah berikutnya kita perlu untuk mengkofigurasi *routing* urls, yaitu agar urls aplikasi kita terhubung dengan urls pada project `Shelf`
    + Buat file `urls.py` di `main` dan isi dengan kode berikut.
-     ```
+     ```python
      from django.urls import path
      from main.views import show_main
 
@@ -100,7 +100,7 @@
 
 ---
 ### Pertanyaan untuk Tugas 3
-1.  Apa perbedaan antara form POST dan form GET dalam Django?
+1.  Apa perbedaan antara form POST dan form GET dalam Django? <br>
     Form POST dan form GET merupakan method pada HTTP ketika kita sedang berurusan dengan form. <br> <br>
     POST method membuat browser mengemas data form, meng-encode datanya untuk ditransmisikan, mengirimkannya ke server, dan kemudian menerima responnya kembali. <br> <br>
     GET method membuat browser mengemas data yang disubmit menjadi string, dan menggunakannya untuk menghasilkan URL. The URL berisi alamat di mana data harus dikirim. <br> <br>
@@ -112,20 +112,160 @@
 |Bookmarked|Tidak bisa dibookmarked|Bisa dibookmarked|
 |Cached|Tidak dicached|Bisa dicached|
 |Tipe Encoding|application/x-www-form-urlencoded or multipart/form-data. Use multipart encoding for binary data|application/x-www-form-urlencoded|
-|History|Parameters are not saved in browser history|Parameters remain in browser history|
-|Restrictions on data length|No restrictions|Yes, when sending data, the GET method adds the data to the URL; and the length of a URL is limited (maximum URL length is 2048 characters)|
-|Restrictions on data type|No restrictions. Binary data is also allowed|Only ASCII characters allowed|
-|Security|GET is less secure compared to POST because data sent is part of the URL <br> Never use GET when sending passwords or other sensitive information!|POST is a little safer than GET because the parameters are not stored in browser history or in web server logs|
-|Visibility|Data is not displayed in the URL|Data is visible to everyone in the URL|
+|History|Parameter tidak disimpan dalam history browser|Parameters tersimpan di history browser|
+|Batasan Panjang Data|Tidak ada batasan|Ada batasan, ketika mengirim data, GET method menambahkan data ke URL; dan panjang URL terbatas (batasa maksimumnya 2048 karakter)|
+|Batasan Tipe Data|Tidak ada batasan|Hanya boleh ASCII characters|
+|Security|Lebih aman|Kurang aman dibandingkan POST|
+|Visibility|Data tidak ditampilkan di URL|Data terlihat oleh semua orang di URL|
 
-2.  Apa perbedaan utama antara XML, JSON, dan HTML dalam konteks pengiriman data?
+2.  Apa perbedaan utama antara XML, JSON, dan HTML dalam konteks pengiriman data? <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; Perbedaan yang mendasar antara XML, JSON, dan HTML adalah XML dan JSON digunakan untuk menyimpan data dan transaksi data sedangkan HTML digunakan untuk menjelaskan bagaimana data-data tersebut akan ditampilkan. Fungsi utama mengapa XML dan JSON dibedakan dengan HTML adalah agar data yang berubah secara dinamis dapat diakomodasi tanpa harus terus-menerus memodifikasi kode yang digunakan untuk menampilkan data. <br>
+    &nbsp;&nbsp;&nbsp;&nbsp; Secara singkat, HTML menjadi landasan utama dalam web development dan digunakan untuk membangun webpagenya. XML dan JSON digunakan untuk mengirim data antar server dan sering digunakan bersamaan dengan HTML atau aplikasi lainnya. Berikutnya merupakan perbedaan utama antara XML dan JSON yang saya ambil dari [DeltaXML](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet/) <br>
+
+|XML|JSON|
+|---|---|
+|eXtensible Markup Language|JavaScript Object Notation|
+|Berasal dari SGML|berasal dari JavaScript|
+|Markup language dan menggunakan tag structure untuk merepresentasikan data items|Cara untuk merepresentasikan object|
+|Bisa menggunakan namespaces|Tidak bisa menggunakan namespaces|
+|Tidak bisa menggunakan arrays|Bisa menggunakan arrays|
+|Dokumennya sulit dibaca dan diiterpretasikan|Lebih mudah untuk dibaca|
+|Harus diakhiri end tag|Tidak perlu diakhiri end tag|
+|Lebih aman dari JSON|Kurang aman dibanding XML|
+|Bisa diberi comment|Tidak bisa diberi comment|
+|bisa menggunakan banyak encoding|hanya menggunakan UTF-8 encoding|
     
-3.  Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
-    
+3.  Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern? <br>
+    Ada banyak alasan mengapa JSON lebih umum digunakan dalam pertukaran data: <br>
+    + JSON memiliki format yang lebih ringan dan readable untuk manusia. Bentuknya yang seperti Dictionary dalam python membuat kita juga lebih familiar dengan JSON dibandingkan dengan XML atau yang lainnya. <br>
+    + JSON cenderung menghasilkan data yang lebih kompak dibandingkan dengan XML. Hal ini dapat mengurangi beban bandwidth dan waktu transfer data. <br>
+    + Browser modern memiliki dukungan bawaan untuk parsing dan mengonversi data JSON menjadi objek JavaScript, sehingga mempermudah pengolahan data di sisi klien. <br> <br>
 4.  Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+    + Langkah pertama, seperti biasa ketika kita ingin memulai untuk melanjutkan mengerjakan project kita, jangan lupa untuk mengaktifkan virtual environment agar project kita tidak tidak bertabrakan dengan dependencies yang lain. Jalankan kode ini di terminal. <br>
+      ```
+      env\Scripts\activate.bat
+      ```
+    + Selanjutnya, buat folder `templates` di root folder dan buat juga file `base.html` yang isinya dapat dilihat di [sini](https://github.com/Abbilville/Shelf/blob/main/templates/base.html). kegunaan base.html ini adalah sebagai template dasar untuk file html lainnya. <br>
+    + Pergi ke `settings.py` lalu ke variable `TEMPLATES`, tambahkan kode `BASE_DIR / 'templates'` di dalam list `DIRS` <br>
+    + Buat file baru `forms.py` pada folder `main` dan isi filenya dengan: <br> <br>
+     ```python
+     from django.forms import ModelForm
+     from main.models import Item
 
+     class ItemForm(ModelForm):
+        class Meta:
+           model = Item
+           fields = ["name", "amount", "price", "description", "category"]
+     ```
+    + Pada folder `templates` pada `main`, tambahkan file `create_item.html` dan isi dengan kode berikut: <br> <br>
+     ```HTML
+      {% extends 'base.html' %} 
+   
+      {% block content %}
+      <h1>Add New Item</h1>
+
+      <form method="POST">
+          {% csrf_token %}
+          <table>
+              {{ form.as_table }}
+              <tr>
+                  <td></td>
+                  <td>
+                      <input type="submit" value="Add Item"/>
+                  </td>
+              </tr>
+          </table>
+      </form>
+      
+      {% endblock %}
+     ```
+    + Buka file `views.py` pada folder `main` dan tambahkan kode ini di paling atas: <br> <br>
+     ```python
+     from django.http import HttpResponseRedirect, HttpResponse
+     from main.forms import ProductForm
+     from django.urls import reverse
+     from django.core import serializers
+     from main.models import Item
+     ```
+   + Ubah function `show_main` menjadi seperti ini: <br> <br>
+     ```python
+     def show_main(request):
+        item = Item.objects.all()
+
+        context = {
+           'name': 'Abbilhaidar Farras Zulfikar',
+           'class': 'PBP F',
+           'item' : item,
+        }
+
+        return render(request, "main.html", context)
+     ```
+     + Tambahkan 5 function berikut pada `views.py`: <br> <br>
+     ```python
+     # Function untuk menampilkan create_item.html
+     def create_item(request):
+         form = ItemForm(request.POST or None)
+
+         if form.is_valid() and request.method == "POST":
+             form.save()
+             return HttpResponseRedirect(reverse('main:show_main'))
+
+         context = {'form': form}
+         return render(request, "create_product.html", context)
+     ```
+
+     ```
+      def show_xml(request):
+          data = Item.objects.all()
+          return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+     ```
+
+     ```
+      def show_json(request):
+          data = Item.objects.all()
+          return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+     ```
+
+     ```
+      def show_xml_by_id(request, id):
+          data = Item.objects.filter(pk=id)
+          return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+     ```
+
+     ```
+      def show_json_by_id(request, id):
+          data = Item.objects.filter(pk=id)
+          return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+     ```
+     + Pada file `urls.py` di `main`, tambahkan import function yang sudah kita buat tadi di `views.py` dan tambahkan juga `urlpatterns`nya jadi seperti ini: <br> <br>
+     ```python
+      from django.urls import path
+      from main.views import show_main, create_item, show_xml, show_json, show_xml_by_id, show_json_by_id
+      
+      app_name = 'main'
+      
+      urlpatterns = [
+          path('', show_main, name='show_main'),
+          path('create-item', create_item, name='create_item'),
+          path('xml/', show_xml, name='show_xml'),
+          path('json/', show_json, name='show_json'),
+          path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+          path('json/<int:id>/', show_json_by_id, name='show_json_by_id'), 
+      ]
+     ```
+   + Jalankan `python manage.py runserver` untuk mencoba semuanya. <br>
 5.  Akses kelima URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman
-    
+   + /create-item <br>
+    ![image](https://github.com/Abbilville/Shelf/assets/119837732/3bbc695d-a854-4fa8-8483-5efba610387f)
+   + /json/ <br>
+    ![image](https://github.com/Abbilville/Shelf/assets/119837732/15ba247f-201f-4791-8e17-633c100aeed8)
+   + /xml/ <br>
+    ![image](https://github.com/Abbilville/Shelf/assets/119837732/da090eab-707f-424a-bdc3-7cc7924a7b82)
+   + /json/60f0fa69-89fe-4017-948c-ee02a936b665 <br>
+    ![image](https://github.com/Abbilville/Shelf/assets/119837732/bbe1cbd1-0a45-4125-980f-261208b06557)
+   + /xml/99072892-9bff-4075-8df7-354872ea4dd1 <br>
+    ![image](https://github.com/Abbilville/Shelf/assets/119837732/b3a9ecf8-414b-4f2a-905b-b3329c41b1d8)
+
 ---
 ## References
 1. [Django Architecture](https://data-flair.training/blogs/django-architecture/ "Data Flair")
