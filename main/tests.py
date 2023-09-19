@@ -5,11 +5,12 @@ class ItemTestCase(TestCase):
     
     def setUp(self):
         self.item = Item.objects.create(
+            id = 1,
             name = "Milk",
             amount = 20,
             description = "Fresh milk from cows",
             price = 5000,
-            category = "diary",
+            category = "dairy",
         )
 
     def test_item(self):
@@ -19,4 +20,4 @@ class ItemTestCase(TestCase):
         self.assertEqual(item_from_databases.amount, 20)
         self.assertEqual(item_from_databases.description, "Fresh milk from cows")
         self.assertEqual(item_from_databases.price, 5000)
-        self.assertEqual(item_from_databases.category, "diary")
+        self.assertEqual(item_from_databases.category, "dairy")

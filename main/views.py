@@ -11,7 +11,8 @@ def show_main(request):
     context = {
         'name': 'Abbilhaidar Farras Zulfikar',
         'class': 'PBP F',
-        'items' : item
+        'items' : item,
+        'message': "You have successfully added a new item: " + item[1].name,
     }
 
     return render(request, "main.html", context)
