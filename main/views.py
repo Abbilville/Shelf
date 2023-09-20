@@ -6,13 +6,16 @@ from main.forms import ItemForm
 from main.models import Item
 
 def show_main(request):
-    item = Item.objects.all()
+    items = Item.objects.all()
+    item_sum = 0
+    for item in items:
+        item_sum += item.amount
 
     context = {
         'name': 'Abbilhaidar Farras Zulfikar',
         'class': 'PBP F',
-        'items' : item,
-        'message': "You have successfully added a new item: " + item[1].name,
+        'items' : items,
+        'message': f"You have {item_sum} items in the shelf",
     }
 
     return render(request, "main.html", context)
