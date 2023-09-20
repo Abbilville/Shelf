@@ -191,12 +191,15 @@
      ```python
      def show_main(request):
         item = Item.objects.all()
+        item_sum = 0
+        for item in items:
+            item_sum += item.amount
 
         context = {
            'name': 'Abbilhaidar Farras Zulfikar',
            'class': 'PBP F',
-           'item' : item,
-           'message': "You have successfully added a new item: " + item[1].name,
+           'item' : items,
+           'message': f"You have {item_sum} items in the shelf",
         }
 
         return render(request, "main.html", context)
@@ -253,6 +256,53 @@
           path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
           path('json/<str:id>/', show_json_by_id, name='show_json_by_id'), 
       ]
+     ```
+   + Pada file `main.html` di folder `templates` pada `main` ubah kodenya menjadi: <br> <br>
+     ```HTML
+      {% extends 'base.html' %}
+
+      {% block content %}
+          <h1>Shelf Page</h1>
+      
+          <h5>Name:</h5>
+          <p>{{name}}</p>
+      
+          <h5>Class:</h5>
+          <p>{{class}}</p>
+      
+          <table>
+              <tr>
+                  <th>Name</th>
+                  <th>Amount</th>
+                  <th>Price</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Date Added</th>
+              </tr>
+          
+              {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
+              {{message}}
+              {% for item in items %}
+                  <tr>
+                      <td>{{item.name}}</td>
+                      <td>{{item.amount}}</td>
+                      <td>{{item.price}}</td>
+                      <td>{{item.description}}</td>
+                      <td>{{item.category}}</td>
+                      <td>{{item.date_added}}</td>
+                  </tr>
+              {% endfor %}
+          </table>
+          
+          <br />
+          
+          <a href="{% url 'main:create_item' %}">
+              <button>
+                  Add New Item
+              </button>
+          </a>
+    
+      {% endblock content %}
      ```
    + Jalankan `python manage.py runserver` untuk mencoba semuanya. <br>
 5.  Akses kelima URL di poin 2 menggunakan Postman, membuat screenshot dari hasil akses URL pada Postman
