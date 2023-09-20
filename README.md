@@ -196,6 +196,7 @@
            'name': 'Abbilhaidar Farras Zulfikar',
            'class': 'PBP F',
            'item' : item,
+           'message': "You have successfully added a new item: " + item[1].name,
         }
 
         return render(request, "main.html", context)
@@ -249,8 +250,8 @@
           path('create-item', create_item, name='create_item'),
           path('xml/', show_xml, name='show_xml'),
           path('json/', show_json, name='show_json'),
-          path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
-          path('json/<int:id>/', show_json_by_id, name='show_json_by_id'), 
+          path('xml/<str:id>/', show_xml_by_id, name='show_xml_by_id'),
+          path('json/<str:id>/', show_json_by_id, name='show_json_by_id'), 
       ]
      ```
    + Jalankan `python manage.py runserver` untuk mencoba semuanya. <br>
