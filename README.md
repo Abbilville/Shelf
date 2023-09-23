@@ -318,6 +318,18 @@
     ![image](https://github.com/Abbilville/Shelf/assets/119837732/b3a9ecf8-414b-4f2a-905b-b3329c41b1d8)
 
 ---
+### Pertanyaan untuk Tugas 4
+1. Apa itu Django `UserCreationForm`, dan jelaskan apa kelebihan dan kekurangannya?
+   
+2. Apa perbedaan antara autentikasi dan otorisasi dalam konteks Django, dan mengapa keduanya penting?
+   
+3. Apa itu cookies dalam konteks aplikasi web, dan bagaimana Django menggunakan cookies untuk mengelola data sesi pengguna?
+   
+4. Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai?
+   
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
+    
+---
 ## References
 1. [Django Architecture](https://data-flair.training/blogs/django-architecture/ "Data Flair")
 2. [Python Virtual Environment](https://www.geeksforgeeks.org/python-virtual-environment/ "GeeksForGeeks")
@@ -327,3 +339,8 @@
 6. [HTTP Request Methods](https://www.w3schools.com/tags/ref_httpmethods.asp "W3Schools")
 7. [What’s the Relationship Between XML, JSON, HTML and the Internet?](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet "DeltaXML")
 8. [XML Vs JSON: Which Is The Better Data Transfer Format?](https://openxmldeveloper.org/xml-vs-json-which-is-the-better-data-transfer-format/ "OpenXMLDeveloper")
+9. [Django UserCreationForm| Creating New User(https://www.javatpoint.com/django-usercreationform "javaTpoint")
+10. [User authentication in Django](https://docs.djangoproject.com/en/4.2/topics/auth/ "Django Documentation")
+11. [What are Cookies?](https://www.kaspersky.com/resource-center/definitions/cookies "Kapersky")
+12. [Django Cookies](https://www.javatpoint.com/django-cookie "javaTpoint")
+13. [What Are Cookies & How Do They Work?](https://blog.sucuri.net/2023/01/what-are-cookies-a-short-guide-to-managing-your-online-privacy.html "Sucuri blog")
