@@ -16,11 +16,8 @@
             <th>Price</th>
             <th>Description</th>
             <th>Category</th>
-            <th>Date Added</th>
         </tr>
-    
-        {% comment %} Berikut cara memperlihatkan data produk di bawah baris ini {% endcomment %}
-        {{message}}
+
         {% for item in items %}
             <tr>
                 <td>{{item.name}}</td>
@@ -28,16 +25,23 @@
                 <td>{{item.price}}</td>
                 <td>{{item.description}}</td>
                 <td>{{item.category}}</td>
-                <td>{{item.date_added}}</td>
             </tr>
         {% endfor %}
     </table>
     
     <br />
+
+    <h5>Sesi terakhir login: {{ last_login }}</h5>
     
     <a href="{% url 'main:create_item' %}">
         <button>
             Add New Item
+        </button>
+    </a>
+
+    <a href="{% url 'main:logout' %}">
+        <button>
+            Logout
         </button>
     </a>
     
