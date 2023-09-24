@@ -321,7 +321,7 @@
 ### Pertanyaan untuk Tugas 4
 1. Apa itu Django `UserCreationForm`, dan jelaskan apa kelebihan dan kekurangannya?
    Kelebihan dalam menggunakan `UserCreationForm` adalah kita tidak perlu menghandle lagi password yang tidak sesuai dengan ketentuan atau nama *user* yang duplikat, oleh karena itu sebagai *software engineer*, dengan adanya fitur ini sangat mempermudah hidup. <br>
-   Kekurangan dalam menggunakan `UserCreationForm` mungkin ketika membuat akun, limitasi passwordnya sangat strict sehingga membuat *user* bingung mau bikin password apa.
+   Kekurangan dalam menggunakan `UserCreationForm` mungkin ketika membuat akun, limitasi passwordnya sangat strict sehingga membuat *user* bingung mau bikin password apa. <br>
    
 2. Apa perbedaan antara autentikasi dan otorisasi dalam konteks Django, dan mengapa keduanya penting? <br>
    Autentikasi adalah proses verifikasi identitas pengguna. Ini memastikan bahwa pengguna yang mencoba mengakses aplikasi web adalah orang tepat. Sedangkan Otorisasi adalah proses yang mengatur akses pengguna terotentikasi ke sumber daya atau fungsi tertentu dalam aplikasi web. Ini menentukan apa yang dapat dilakukan oleh pengguna yang sudah terotentikasi. <br>
@@ -329,11 +329,159 @@
    
 3. Apa itu cookies dalam konteks aplikasi web, dan bagaimana Django menggunakan cookies untuk mengelola data sesi pengguna?
    Cookie adalah informasi yang disimpan dalam web pengguna. Cookies digunakan untuk menyimpan data pengguna dalam sebuah file secara permanen (atau untuk jangka waktu tertentu). Cookies memiliki tanggal dan waktu kedaluwarsa dan akan dihapus secara otomatis ketika waktu kedaluwarsanya tiba. Django menyediakan metode bawaan untuk mengatur dan mengambil cookies. <br>
+   Dalam Django sendiri, kita dapat mengakses Cookies dengan mengambil saja value yang ada di dictionary COOKIES menggunakan key yang ada misalnya pada tugas ini keynya yaitu 'last_login' dan akan mengembalikkan value kapan terakhir kali user login. <br>
    
 4. Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai?
+   Data dalam cookies itu tidak berbahaya dan tidak dapat menginfeksi sistem atau situs web dengan aplikasi apapun. Password juga tidak akan disimpan dalam cookie jadi akan aman-aman saja. Namun jika cookies tidak diatur dengan baik, hal ini dapat menjadi pelanggaran privasi pengguna, terutama jika informasi pribadi seperti nama, alamat, atau data sensitif lainnya tersimpan dalam cookies. <br>
    
 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
-    
+   + Langkah pertama untuk mengimplementasikan fungsi login, registrasi, dan logout adalah dengan menambahkan fungsi di views.py, untuk registrasinya sendiri disini menggunakan `UserCreationForm` agar dapat mempermudah hidup. untuk implementasinya bisa tambahkan kode berikut di `views.py` <br>
+   ```python
+   ...
+   from django.shortcuts import redirect
+   from django.contrib.auth.forms import UserCreationForm
+   from django.contrib import messages
+
+   ...
+
+   def register(request):
+       form = UserCreationForm()
+   
+       if request.method == "POST":
+           form = UserCreationForm(request.POST)
+           if form.is_valid():
+               form.save()
+               messages.success(request, 'Your account has been successfully created!')
+               return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+   ```
+   + Untuk fungsi login dan logoutnya bisa tambahkan kode berikut di `views.py` <br>
+   ```python
+   ...
+   from django.contrib.auth import authenticate, login, logout
+   from django.contrib.auth.decorators import login_required
+
+   @login_required(login_url='/login')
+   def show_main(request):
+   ...
+
+   def login_user(request):
+       if request.method == 'POST':
+           username = request.POST.get('username')
+           password = request.POST.get('password')
+           user = authenticate(request, username=username, password=password)
+           if user is not None:
+               login(request, user)
+               return redirect('main:show_main')
+           else:
+               messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+
+   def logout_user(request):
+       logout(request)
+       return redirect('main:login')
+   ```
+     `@login_required(login_url='/login')` berguna agar halaman main hanya dapat diakses oleh pengguna yang sudah login (terautentikasi).
+   + Setelah membuat fungsinya, sekarang buat htmlnya agar registrasi dan login memiliki tampilannya. Buat file `register.html` dan `login.html` pada directori `main/templates/` dan dapat diimplementasikan seperti ini: [register.html](https://github.com/Abbilville/Shelf/blob/main/main/templates/register.html) [login.html](https://github.com/Abbilville/Shelf/blob/main/main/templates/login.html) <br>
+   + Setelah itu tambahkan juga path masing-masing ke `urls.py` pada direktori `main` <br>
+   ```python
+   urlpatterns = [
+       ...
+       path('register/', register, name='register'), 
+       path('login/', login_user, name='login'),
+       path('logout/', logout_user, name='logout'),
+       ...
+   ]
+   ```
+   + Selanjutnya jalankan `python manage.py runserver` dan buka `http://localhost:8000/` pada web untuk mencoba fitur-fitur yang baru saja ditambahkan. <br>
+   + Lalu pada ceklis *checklist* kedua disuruh untuk membuat dua *dummy* account dengan masing-masing tiga *dummy* data. Untuk saat ini semua akun akan terhubung ke data yang sama entah siapapun yang membuatnya. Sekarang kita akan membuat user menjadi bagian dari models agar setiap account memiliki datanya masing-masing. Tabi sebelum itu bikin dulu 1 akun untuk langkah selanjutnya<br>
+   + Pada `models.py` di direktori `main`, tambahkan `user` pada class Item <br>
+   ```python
+   ...
+   from django.contrib.auth.models import User
+
+   class Item(models.Model):
+       user = models.ForeignKey(User, on_delete=models.CASCADE)
+   ...
+   ```
+   + Lalu ubah function `show_main` dan `create_product` pada `views.py` di direktor `main`<br>
+   ```python
+   ...
+   
+   def show_main(request):
+       products = Product.objects.filter(user=request.user)
+   
+       context = {
+           'name': request.user.username,
+            ...
+   ...
+   
+   def create_product(request):
+       form = ProductForm(request.POST or None)
+      
+       if form.is_valid() and request.method == "POST":
+           product = form.save(commit=False)
+           product.user = request.user
+           product.save()
+           return HttpResponseRedirect(reverse('main:show_main'))
+   ...
+   ```
+   + Karena sekarang user dan models sudah saling terhubung maka sudah bisa untuk masing-masing akun memiliki datanya masing-masing. <br>
+   + Selanjutnya, karena kita mengubah `models.py` maka kita perlu melakukan migrasi dengan menjalankan `python manage.py makemigrations` kemudian `python manage.py migrate`. <br>
+   + Untuk mengimplementasikan *checklist* keempat, kita perlu memanfaatkan cookies yang ada pada Django. Pada `views.py` di direktori `main` tambahkan `import datetime`. <br>
+   + Setelah itu ubah fungsi `login_user` agar men-set cookies dengan key `last_login` dengan waktu sekarang <br>
+   ```python
+   def login_user(request):
+       if request.method == 'POST':
+           username = request.POST.get('username')
+           password = request.POST.get('password')
+           user = authenticate(request, username=username, password=password)
+           if user is not None:
+               login(request, user)
+               response = HttpResponseRedirect(reverse("main:show_main")) 
+               response.set_cookie('last_login', str(datetime.datetime.now()))
+               return response
+           else:
+               messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+   ```
+   + Pada fungsi `show_main`, tambahkan variable `last_login` di dalam `context` dan ambil datanya dari COOKIES <br>
+   ```python
+   def show_main(request):
+       items = Item.objects.filter(user=request.user)
+       item_sum = 0
+       for item in items:
+           item_sum += item.amount
+   
+       context = {
+           'name': request.user.username,
+           'class': 'PBP F',
+           'items' : items,
+           'message': f"You have {item_sum} items in the shelf",
+           'last_login': request.COOKIES['last_login'], # <---- Ini
+       }
+
+    return render(request, "main.html", context)
+   ```
+   + Ubah juga function `logout_user` <br> 
+   ```python
+   def logout_user(request):
+       logout(request)
+       response = HttpResponseRedirect(reverse('main:login'))
+       response.delete_cookie('last_login')
+       return response
+   ```
+   + Tambahkan juga kode ini di `main.html` pada direktori `main/templates` di antara tabel dengan tombol <br>
+   ```HTML
+   ...
+   <h5>Sesi terakhir login: {{ last_login }}</h5>
+   ...
+   ```
+   + Nah sekarang jika login maka akan terlihat tulisan kapan terakhir loginnya <br>
+   
 ---
 ## References
 1. [Django Architecture](https://data-flair.training/blogs/django-architecture/ "Data Flair")
