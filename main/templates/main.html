@@ -16,15 +16,35 @@
             <th>Price</th>
             <th>Description</th>
             <th>Category</th>
+            <th>Delete</th>
         </tr>
-
+    
         {% for item in items %}
             <tr>
                 <td>{{item.name}}</td>
-                <td>{{item.amount}}</td>
+                <td>
+                    <a href="{% url 'main:decrement_item' item.id %}">
+                        <button>
+                            -
+                        </button>
+                    </a>
+                    {{item.amount}}
+                    <a href="{% url 'main:increment_item' item.id %}">
+                        <button>
+                            +
+                        </button>
+                    </a>
+                </td>
                 <td>{{item.price}}</td>
                 <td>{{item.description}}</td>
                 <td>{{item.category}}</td>
+                <td>
+                    <a href="{% url 'main:delete_item' item.id %}">
+                        <button>
+                            Delete
+                        </button>
+                    </a>
+                </td>
             </tr>
         {% endfor %}
     </table>
