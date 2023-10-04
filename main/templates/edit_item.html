@@ -1,14 +1,15 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
+
+{% load static %}
 
 {% block content %}
 {% load static %}
 <body class="bg">
 <head>
-    <link rel="stylesheet" href="{% static 'css/create_item.css' %}">
+    <link rel="stylesheet" href="{% static 'css/edit_item.css' %}">
 </head>
-<div class="title">
-    <h1>Add New Item</h1>
-</div>
+
+<h1>Edit Product</h1>
 
 <form method="POST">
     {% csrf_token %}
@@ -17,11 +18,10 @@
         <tr>
             <td></td>
             <td>
-                <input type="submit" value="Add Item"/>
+                <input type="submit" value="Edit Product"/>
             </td>
         </tr>
     </table>
 </form>
 </body>
-
 {% endblock %}

@@ -1,68 +1,75 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Shelf Page</h1>
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
 
-    <h5>Name:</h5>
-    <p>{{name}}</p>
-
-    <h5>Class:</h5>
-    <p>{{class}}</p>
-
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Amount</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Category</th>
-            <th>Delete</th>
-        </tr>
-    
-        {% for item in items %}
-            <tr>
-                <td>{{item.name}}</td>
-                <td>
-                    <a href="{% url 'main:decrement_item' item.id %}">
-                        <button>
-                            -
-                        </button>
-                    </a>
-                    {{item.amount}}
-                    <a href="{% url 'main:increment_item' item.id %}">
-                        <button>
-                            +
-                        </button>
-                    </a>
-                </td>
-                <td>{{item.price}}</td>
-                <td>{{item.description}}</td>
-                <td>{{item.category}}</td>
-                <td>
-                    <a href="{% url 'main:delete_item' item.id %}">
-                        <button>
-                            Delete
-                        </button>
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-    
-    <br />
+<nav class="navbar navbar-expand-lg bg-light">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Shelf</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link deactivate">Welcome back, {{name}}!</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Brand</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">Your Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" href="#">About Us</a>
+          </li>
+        </ul>
+        <a href="{% url 'main:create_item' %}"><button type="button" class="btn btn-outline-primary">Add Item</button></a>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+        <a href="{% url 'main:logout' %}">
+          <button type="button" class="btn btn-outline-danger">
+              Logout
+          </button>
+      </a>
+      </div>
+    </div>
+</nav>
+<h4>{{message}}</h4>
+<div class="card-container">
+{% for item in items %}
+  <div class="card {% if forloop.last %}last-item{% endif %}" style="width: 18rem;">
+    <div class="card-body">
+      <div class="item-name">
+        <div class="left-content">
+          <h5 class="card-title">{{item.name}} | {{item.category}}</h5>
+        </div>
+        <div class="right-content">
+          <a href="{% url 'main:delete_item' item.id %}">
+            <img src="{% static 'icon/delete_icon.png' %}" alt="Edit Icon">
+          </a>
+        </div>
+      </div>
+      <h6 class="card-subtitle mb-2 text-body-secondary">{{item.amount}} | Rp{{item.price}}</h6>
+      <p class="card-text">{{item.description}}</p>
+      <div class="button-wrap">
+        <a href="{% url 'main:decrement_item' item.id %}"><button type="button" class="btn btn-outline-primary">-</button></a>
+        <a href="{% url 'main:edit_item' item.id %}"><button type="button" class="btn btn-outline-primary">Edit</button></a>
+        <a href="{% url 'main:increment_item' item.id %}"><button type="button" class="btn btn-outline-primary">+</button></a>
+      </div>
+    </div>
+  </div>
+{% endfor %}
+</div>
 
     <h5>Sesi terakhir login: {{ last_login }}</h5>
-    
-    <a href="{% url 'main:create_item' %}">
-        <button>
-            Add New Item
-        </button>
-    </a>
-
-    <a href="{% url 'main:logout' %}">
-        <button>
-            Logout
-        </button>
-    </a>
     
 {% endblock content %}

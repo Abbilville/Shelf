@@ -22,7 +22,7 @@ def show_main(request):
         'name': request.user.username,
         'class': 'PBP F',
         'items' : items,
-        'message': f"You have {item_sum} items in the shelf",
+        'message': f"You have {item_sum} items in your cart",
         'last_login': request.COOKIES['last_login'],
     }
 
@@ -79,7 +79,7 @@ def login_user(request):
             response.set_cookie('last_login', str(datetime.datetime.now()))
             return response
         else:
-            messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+            messages.info(request, 'Username atau Password ada yang salah')
     context = {}
     return render(request, 'login.html', context)
 
@@ -109,6 +109,17 @@ def delete_item(request, id):
     item.delete()
     return HttpResponseRedirect(reverse('main:show_main'))
 
+def edit_item(request, id):
+    # Get product berdasarkan ID
+    product = Item.objects.get(pk = id)
 
-# Dummy1, awdrgyjil
-# Dummy2, qsefthuko
+    # Set product sebagai instance dari form
+    form = ItemForm(request.POST or None, instance=product)
+
+    if form.is_valid() and request.method == "POST":
+        # Simpan form dan kembali ke halaman awal
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_main'))
+
+    context = {'form': form}
+    return render(request, "edit_item.html", context)

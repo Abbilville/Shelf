@@ -6,6 +6,11 @@
 
 {% block content %}  
 
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+</head>
+
 <div class = "login">
     
     <h1>Register</h1>  
@@ -15,18 +20,16 @@
             <table>  
                 {{ form.as_table }}  
                 <tr>  
-                    <td></td>
-                    <td><input type="submit" name="submit" value="Daftar"/></td>  
+                    <td class="reg_cell"><Button type="submit" class="reg_btn">Register</Button></td>
+                    <td class="back_cell"><a href="{% url 'main:login' %}"><button type="button">Back</button></a></td>
                 </tr>  
-            </table>  
+            </table>
         </form>
 
     {% if messages %}  
-        <ul>   
             {% for message in messages %}  
-                <li>{{ message }}</li>  
-                {% endfor %}  
-        </ul>   
+                {{ message }}
+            {% endfor %}  
     {% endif %}
 
 </div>  

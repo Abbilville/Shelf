@@ -6,39 +6,46 @@
 
 {% block content %}
 
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+
 <div class = "login">
 
-    <h1>Login Page</h1>
+    <h1>Login</h1>
 
     <form method="POST" action="">
         {% csrf_token %}
         <table>
             <tr>
                 <td>Username: </td>
-                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><input type="text" name="username" placeholder="Username" class="form-control"></td>
             </tr>
                     
             <tr>
                 <td>Password: </td>
-                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
             </tr>
 
             <tr>
-                <td></td>
-                <td><input class="btn login_btn" type="submit" value="Login"></td>
+                <td colspan="2"><input type="password" name="password" placeholder="Password" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td class="reg_cell"><a href="{% url 'main:register' %}"><button type="button" class="btn btn-light">Register</button></a></td>
+                <td class="login_cell"><Button type="submit" class="btn btn-primary">Login</Button></td>
             </tr>
         </table>
     </form>
 
     {% if messages %}
-        <ul>
             {% for message in messages %}
-                <li>{{ message }}</li>
+                <h6>{{ message }}</h6>
             {% endfor %}
-        </ul>
-    {% endif %}     
-        
-    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+    {% endif %}
 
 </div>
 

@@ -1,0 +1,33 @@
+div {
+    width: 900px; 
+    height: 450px; 
+    background: #FFEEE5; 
+    box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.36); 
+    border-radius: 50px; 
+    border: 1px black solid;
+    margin: auto;
+    margin-top: 100px;
+    padding-top: 20px;
+}
+
+h1 {
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+table {
+    width: 700;
+    margin: auto;
+}
+
+.reg_cell {
+    padding-top: 30px;
+    padding-right: 10px;
+    text-align: right;
+}
+
+.back_cell {
+    padding-top: 30px;
+    padding-right: 10px;
+    text-align: left;
+}
