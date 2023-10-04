@@ -481,7 +481,85 @@
    ...
    ```
    + Nah sekarang jika login maka akan terlihat tulisan kapan terakhir loginnya <br>
-   
+---
+### Pertanyaan untuk Tugas 5
+1. Jelaskan manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya.
+   + **Element Selector** <br>
+      Element selector memilih elemen-elemen yang ada di HTML berdasarkan nama elemennya. i.e. p, h1, h2, div, body. Element selector tepat digunakan jika kita ingin menstyle 1 element yang diinginkan secara keseluruhan.
+   + **Id Selector** <br>
+      Id selector menggunakan atribut id dari sebuah elemen HTML untuk memilih elemen tertentu. Id dari sebuah elemen bersifat unik dalam sebuah halaman, sehingga selektor id dapat digunakan untuk memilih elemen-elemen yang sifatnya unik. Untuk memilih sebuah elemen dengan id tertentu, dapat menggunakan pagar (#), diikuti oleh id dari elemen tersebut. Id selector tepat digunakan jika kita ingin menstyle beberapa elemen dengan id yang sama. contoh `<div id="button>` maka di file css nantinya untuk memilih div dengan id "button" hanya perlu menulis `#button {...}`.
+   + **Class Selector** <br>
+      Class selector memilih elemen-elemen HTML berdasarkan atribut kelasnya. Untuk memilih elemen-elemen berdasarkan kelasnya, dapat menggunakan karakter titik (.), diikuti oleh nama kelas. Class selector tepat digunakan jika kita ingin menstyle beberapa elemen dengan class yang sama. contoh `<div class="btn-class">` maka di file css nantinya untuk memilih div dengan class "btn-class" hanya perlu menulis `.btn-class {...}`.
+   + **Universal Selector**
+      Universal selector (*) memilih semua elemen yang ada di HTML. Universal Selector tepat digunakan jika kita ingin menstyle semua elemen yang ada di HTML. maka yang ada di file css nantinya adalah`* {...}`.
+   + **Grouping Selector**
+     Grouping selector intinya adalah kita dapat memberikan tanda koma (,) pada css file nantinya agar selectornya mendapatkan perilaku yang sama. Grouping selector tepat digunakan jika ada beberapa elemen berbeda namun ingin dibuat dengan style yang sama. `p, h1, h1 {...}`.
+     
+2. Jelaskan HTML5 Tag yang kamu ketahui. <br>
+
+|Tag|Deskripsi|
+|---|---------|
+|`<!--...-->`|Comment pada HTML|
+|`<a>`|Anchor, biasanya untuk link|
+|`<body>`|Body dari HTMLnya|
+|`<br>`|Line break|
+|`<button>`|Tombol|
+|`<div>`|Section dalam HTML|
+|`<form>`|Untuk form|
+|`<h1> to <h6>`|Header 1 sampai 6|
+|`<html>`|Memberitahu kalo ini dokumen HTML|
+|`<img>`|Menampilkan gambar|
+|`<nav>`|Untuk navigation bar|
+|`<p>`|Untuk paragraph|
+|`<table>`|Membuat table|
+|`<td>`|Table Cell|
+|`<tr>`|Table Row|
+
+3. Jelaskan perbedaan antara margin dan padding. <br>
+   Margin digunakan untuk memberikan jarak di sekitar elemen, **di luar border** yang telah didefinisikan.<br>
+   Padding digunakan untuk memberikan jarak di sekitar elemen, **di dalam border** yang telah didefinisikan.<br>
+![1_L5bN2lty8lg5F50PTo4jtw](https://github.com/Abbilville/Shelf/assets/119837732/6b6b8c75-5044-4af1-8cda-4fee12cee202)
+
+4. Jelaskan perbedaan antara framework CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya? <br>
+
+|Aspek|Tailwind CSS|Bootstrap|
+|---|---|---|
+|Filosofi|Utility-first, konfigurasi kustom|Komprehensif, desain bawaan|
+|Kelengkapan Komponen|Terbatas, memerlukan pengembangan|Kaya akan komponen desain|
+|Desain Visual|Tergantung pada penggunaan kelas CSS|Desain bawaan yang konsisten|
+|Kustomisasi|Tinggi, mudah disesuaikan|Terbatas, memerlukan penyesuaian yang lebih besar|
+|Ukuran Bundle|Lebih kecil, hanya memuat apa yang diperlukan|Lebih besar karena banyak komponen|
+|Pengembangan Cepat|Lebih cepat karena kelas utilitas|Lebih lambat karena perlu menyesuaikan komponen|
+|Penggunaan untuk Proyek Kecil|Tidak efisien karena banyak kelas CSS|Efisien karena komponen bawaan|
+|Penggunaan untuk Proyek Besar|Efisien karena mudah disesuaikan|Tidak selalu efisien karena banyak komponen bawaan|
+|Komunitas dan Dukungan|Cepat berkembang, banyak sumber daya|Stabil, komunitas besar dan dokumentasi lengkap|
+
+#### Kapan sebaiknya menggunakan Bootstrap
+   + Bootstrap cocok digunakan jika ingin mengembangkan proyek dengan cepat dan memerlukan banyak komponen desain yang telah ada. <br>
+   + Jika memiliki anggaran waktu dan sumber daya yang terbatas, Bootstrap dapat menghemat waktu dengan desain bawaan yang responsif. <br>
+   + Bootstrap juga cocok untuk proyek yang memerlukan dukungan yang stabil dan memiliki dokumentasi yang lengkap. <br>
+
+#### Kapan sebaiknya menggunakan Tailwind
+   + Tailwind CSS merupakan pilihan yang baik jika ingin memiliki kontrol penuh atas desain dan tidak ingin terikat dengan gaya desain bawaan. <br>
+   + Cocok untuk proyek-proyek yang memerlukan desain yang sangat kustom dan fleksibel. <br>
+   + Jika ingin mengoptimalkan ukuran bundle (load time) proyek, Tailwind mungkin merupakan pilihan yang lebih baik karena hanya memuat apa yang diperlukan. <br>
+   + Tailwind cocok untuk developer yang memiliki pemahaman yang baik tentang CSS. <br>
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
+   + Langkah pertama seperti biasa jalankan `env\Scripts\activate.bat` <br>
+   + Lalu untuk mengimplementasikan css pada setiap file HTML secara external, buatlah folder baru pada `main` dan beri nama `static`. Buat juga folder baru yang bernama `css` untuk menampung file css dan saya juga buat folder `icon` untuk menampung file `.png` untuk icon pada page saya. <br>
+   + Lalu buat semua style yang sesuai dengan HTMLnya. Misal ingin memberi style pada file `main.html`, maka buat file `main.css` pada `main/static/css` dan mulailah memberi style pada file tersebut. <br>
+   + Untuk menghubungkan file css dengan html yang diinginkan tambahkan kode berikut di bagian atas html yang diinginkan: <br>
+   ```
+   ...
+   {% load static %}
+   <head>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+   </head>
+   ```
+   + Kode tersebut berfungsi untuk meload static yang mana akan mengarah ke folder static, dan stylesheet mengarah pada `css/main.css` pada folder static.
+   + Lakukan hal yang sama untuk page login, register, add_item, dan edit_item. <br>
+   + Jalankan `python manage.py runserver` untuk melihat perubahan pada html. <br>
 ---
 ## References
 1. [Django Architecture](https://data-flair.training/blogs/django-architecture/ "Data Flair")
@@ -492,8 +570,11 @@
 6. [HTTP Request Methods](https://www.w3schools.com/tags/ref_httpmethods.asp "W3Schools")
 7. [What’s the Relationship Between XML, JSON, HTML and the Internet?](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet "DeltaXML")
 8. [XML Vs JSON: Which Is The Better Data Transfer Format?](https://openxmldeveloper.org/xml-vs-json-which-is-the-better-data-transfer-format/ "OpenXMLDeveloper")
-9. [Django UserCreationForm] Creating New User(https://www.javatpoint.com/django-usercreationform "javaTpoint")
+9. [Django UserCreationForm](https://www.javatpoint.com/django-usercreationform "javaTpoint")
 10. [User authentication in Django](https://docs.djangoproject.com/en/4.2/topics/auth/ "Django Documentation")
 11. [What are Cookies?](https://www.kaspersky.com/resource-center/definitions/cookies "Kapersky")
 12. [Django Cookies](https://www.javatpoint.com/django-cookie "javaTpoint")
 13. [What Are Cookies & How Do They Work?](https://blog.sucuri.net/2023/01/what-are-cookies-a-short-guide-to-managing-your-online-privacy.html "Sucuri blog")
+14. [CSS Selector](https://www.w3schools.com/css/css_selectors.asp "W3Schools")
+15. [HTML5 - Tags Reference](https://www.tutorialspoint.com/html5/html5_tags.htm "TutorialsPoint")
+16. [Tailwind CSS vs. Bootstrap: Who is More Relevant in the Current Scenario](https://www.zenesys.com/tailwind-css-vs-bootstrap "ZENESYS")
