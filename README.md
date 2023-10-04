@@ -320,15 +320,246 @@
 ---
 ### Pertanyaan untuk Tugas 4
 1. Apa itu Django `UserCreationForm`, dan jelaskan apa kelebihan dan kekurangannya?
+   Kelebihan dalam menggunakan `UserCreationForm` adalah kita tidak perlu menghandle lagi password yang tidak sesuai dengan ketentuan atau nama *user* yang duplikat, oleh karena itu sebagai *software engineer*, dengan adanya fitur ini sangat mempermudah hidup. <br>
+   Kekurangan dalam menggunakan `UserCreationForm` mungkin ketika membuat akun, limitasi passwordnya sangat strict sehingga membuat *user* bingung mau bikin password apa. <br>
    
-2. Apa perbedaan antara autentikasi dan otorisasi dalam konteks Django, dan mengapa keduanya penting?
+2. Apa perbedaan antara autentikasi dan otorisasi dalam konteks Django, dan mengapa keduanya penting? <br>
+   Autentikasi adalah proses verifikasi identitas pengguna. Ini memastikan bahwa pengguna yang mencoba mengakses aplikasi web adalah orang tepat. Sedangkan Otorisasi adalah proses yang mengatur akses pengguna terotentikasi ke sumber daya atau fungsi tertentu dalam aplikasi web. Ini menentukan apa yang dapat dilakukan oleh pengguna yang sudah terotentikasi. <br>
+   Mereka berdua penting karena autentikasi dan otorisasi dapat memastikan bahwa aplikasi web menjadi aman, data sensitif terlindungi, dan *user* memiliki akses yang sesuai dengan function yang diberikan. <br>
    
 3. Apa itu cookies dalam konteks aplikasi web, dan bagaimana Django menggunakan cookies untuk mengelola data sesi pengguna?
+   Cookie adalah informasi yang disimpan dalam web pengguna. Cookies digunakan untuk menyimpan data pengguna dalam sebuah file secara permanen (atau untuk jangka waktu tertentu). Cookies memiliki tanggal dan waktu kedaluwarsa dan akan dihapus secara otomatis ketika waktu kedaluwarsanya tiba. Django menyediakan metode bawaan untuk mengatur dan mengambil cookies. <br>
+   Dalam Django sendiri, kita dapat mengakses Cookies dengan mengambil saja value yang ada di dictionary COOKIES menggunakan key yang ada misalnya pada tugas ini keynya yaitu 'last_login' dan akan mengembalikkan value kapan terakhir kali user login. <br>
    
 4. Apakah penggunaan cookies aman secara default dalam pengembangan web, atau apakah ada risiko potensial yang harus diwaspadai?
+   Data dalam cookies itu tidak berbahaya dan tidak dapat menginfeksi sistem atau situs web dengan aplikasi apapun. Password juga tidak akan disimpan dalam cookie jadi akan aman-aman saja. Namun jika cookies tidak diatur dengan baik, hal ini dapat menjadi pelanggaran privasi pengguna, terutama jika informasi pribadi seperti nama, alamat, atau data sensitif lainnya tersimpan dalam cookies. <br>
    
 5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).
-    
+   + Langkah pertama untuk mengimplementasikan fungsi login, registrasi, dan logout adalah dengan menambahkan fungsi di views.py, untuk registrasinya sendiri disini menggunakan `UserCreationForm` agar dapat mempermudah hidup. untuk implementasinya bisa tambahkan kode berikut di `views.py` <br>
+   ```python
+   ...
+   from django.shortcuts import redirect
+   from django.contrib.auth.forms import UserCreationForm
+   from django.contrib import messages
+
+   ...
+
+   def register(request):
+       form = UserCreationForm()
+   
+       if request.method == "POST":
+           form = UserCreationForm(request.POST)
+           if form.is_valid():
+               form.save()
+               messages.success(request, 'Your account has been successfully created!')
+               return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
+   ```
+   + Untuk fungsi login dan logoutnya bisa tambahkan kode berikut di `views.py` <br>
+   ```python
+   ...
+   from django.contrib.auth import authenticate, login, logout
+   from django.contrib.auth.decorators import login_required
+
+   @login_required(login_url='/login')
+   def show_main(request):
+   ...
+
+   def login_user(request):
+       if request.method == 'POST':
+           username = request.POST.get('username')
+           password = request.POST.get('password')
+           user = authenticate(request, username=username, password=password)
+           if user is not None:
+               login(request, user)
+               return redirect('main:show_main')
+           else:
+               messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+
+   def logout_user(request):
+       logout(request)
+       return redirect('main:login')
+   ```
+     `@login_required(login_url='/login')` berguna agar halaman main hanya dapat diakses oleh pengguna yang sudah login (terautentikasi).
+   + Setelah membuat fungsinya, sekarang buat htmlnya agar registrasi dan login memiliki tampilannya. Buat file `register.html` dan `login.html` pada directori `main/templates/` dan dapat diimplementasikan seperti ini: [register.html](https://github.com/Abbilville/Shelf/blob/main/main/templates/register.html) [login.html](https://github.com/Abbilville/Shelf/blob/main/main/templates/login.html) <br>
+   + Setelah itu tambahkan juga path masing-masing ke `urls.py` pada direktori `main` <br>
+   ```python
+   urlpatterns = [
+       ...
+       path('register/', register, name='register'), 
+       path('login/', login_user, name='login'),
+       path('logout/', logout_user, name='logout'),
+       ...
+   ]
+   ```
+   + Selanjutnya jalankan `python manage.py runserver` dan buka `http://localhost:8000/` pada web untuk mencoba fitur-fitur yang baru saja ditambahkan. <br>
+   + Lalu pada ceklis *checklist* kedua disuruh untuk membuat dua *dummy* account dengan masing-masing tiga *dummy* data. Untuk saat ini semua akun akan terhubung ke data yang sama entah siapapun yang membuatnya. Sekarang kita akan membuat user menjadi bagian dari models agar setiap account memiliki datanya masing-masing. Tabi sebelum itu bikin dulu 1 akun untuk langkah selanjutnya<br>
+   + Pada `models.py` di direktori `main`, tambahkan `user` pada class Item <br>
+   ```python
+   ...
+   from django.contrib.auth.models import User
+
+   class Item(models.Model):
+       user = models.ForeignKey(User, on_delete=models.CASCADE)
+   ...
+   ```
+   + Lalu ubah function `show_main` dan `create_product` pada `views.py` di direktor `main`<br>
+   ```python
+   ...
+   
+   def show_main(request):
+       products = Product.objects.filter(user=request.user)
+   
+       context = {
+           'name': request.user.username,
+            ...
+   ...
+   
+   def create_product(request):
+       form = ProductForm(request.POST or None)
+      
+       if form.is_valid() and request.method == "POST":
+           product = form.save(commit=False)
+           product.user = request.user
+           product.save()
+           return HttpResponseRedirect(reverse('main:show_main'))
+   ...
+   ```
+   + Karena sekarang user dan models sudah saling terhubung maka sudah bisa untuk masing-masing akun memiliki datanya masing-masing. <br>
+   + Selanjutnya, karena kita mengubah `models.py` maka kita perlu melakukan migrasi dengan menjalankan `python manage.py makemigrations` kemudian `python manage.py migrate`. <br>
+   + Untuk mengimplementasikan *checklist* keempat, kita perlu memanfaatkan cookies yang ada pada Django. Pada `views.py` di direktori `main` tambahkan `import datetime`. <br>
+   + Setelah itu ubah fungsi `login_user` agar men-set cookies dengan key `last_login` dengan waktu sekarang <br>
+   ```python
+   def login_user(request):
+       if request.method == 'POST':
+           username = request.POST.get('username')
+           password = request.POST.get('password')
+           user = authenticate(request, username=username, password=password)
+           if user is not None:
+               login(request, user)
+               response = HttpResponseRedirect(reverse("main:show_main")) 
+               response.set_cookie('last_login', str(datetime.datetime.now()))
+               return response
+           else:
+               messages.info(request, 'Sorry, incorrect username or password. Please try again.')
+    context = {}
+    return render(request, 'login.html', context)
+   ```
+   + Pada fungsi `show_main`, tambahkan variable `last_login` di dalam `context` dan ambil datanya dari COOKIES <br>
+   ```python
+   def show_main(request):
+       items = Item.objects.filter(user=request.user)
+       item_sum = 0
+       for item in items:
+           item_sum += item.amount
+   
+       context = {
+           'name': request.user.username,
+           'class': 'PBP F',
+           'items' : items,
+           'message': f"You have {item_sum} items in the shelf",
+           'last_login': request.COOKIES['last_login'], # <---- Ini
+       }
+
+    return render(request, "main.html", context)
+   ```
+   + Ubah juga function `logout_user` <br> 
+   ```python
+   def logout_user(request):
+       logout(request)
+       response = HttpResponseRedirect(reverse('main:login'))
+       response.delete_cookie('last_login')
+       return response
+   ```
+   + Tambahkan juga kode ini di `main.html` pada direktori `main/templates` di antara tabel dengan tombol <br>
+   ```HTML
+   ...
+   <h5>Sesi terakhir login: {{ last_login }}</h5>
+   ...
+   ```
+   + Nah sekarang jika login maka akan terlihat tulisan kapan terakhir loginnya <br>
+---
+### Pertanyaan untuk Tugas 5
+1. Jelaskan manfaat dari setiap element selector dan kapan waktu yang tepat untuk menggunakannya.
+   + **Element Selector** <br>
+      Element selector memilih elemen-elemen yang ada di HTML berdasarkan nama elemennya. i.e. p, h1, h2, div, body. Element selector tepat digunakan jika kita ingin menstyle 1 element yang diinginkan secara keseluruhan.
+   + **Id Selector** <br>
+      Id selector menggunakan atribut id dari sebuah elemen HTML untuk memilih elemen tertentu. Id dari sebuah elemen bersifat unik dalam sebuah halaman, sehingga selektor id dapat digunakan untuk memilih elemen-elemen yang sifatnya unik. Untuk memilih sebuah elemen dengan id tertentu, dapat menggunakan pagar (#), diikuti oleh id dari elemen tersebut. Id selector tepat digunakan jika kita ingin menstyle beberapa elemen dengan id yang sama. contoh `<div id="button>` maka di file css nantinya untuk memilih div dengan id "button" hanya perlu menulis `#button {...}`.
+   + **Class Selector** <br>
+      Class selector memilih elemen-elemen HTML berdasarkan atribut kelasnya. Untuk memilih elemen-elemen berdasarkan kelasnya, dapat menggunakan karakter titik (.), diikuti oleh nama kelas. Class selector tepat digunakan jika kita ingin menstyle beberapa elemen dengan class yang sama. contoh `<div class="btn-class">` maka di file css nantinya untuk memilih div dengan class "btn-class" hanya perlu menulis `.btn-class {...}`.
+   + **Universal Selector**
+      Universal selector (*) memilih semua elemen yang ada di HTML. Universal Selector tepat digunakan jika kita ingin menstyle semua elemen yang ada di HTML. maka yang ada di file css nantinya adalah`* {...}`.
+   + **Grouping Selector**
+     Grouping selector intinya adalah kita dapat memberikan tanda koma (,) pada css file nantinya agar selectornya mendapatkan perilaku yang sama. Grouping selector tepat digunakan jika ada beberapa elemen berbeda namun ingin dibuat dengan style yang sama. `p, h1, h1 {...}`.
+     
+2. Jelaskan HTML5 Tag yang kamu ketahui. <br>
+
+|Tag|Deskripsi|
+|---|---------|
+|`<!--...-->`|Comment pada HTML|
+|`<a>`|Anchor, biasanya untuk link|
+|`<body>`|Body dari HTMLnya|
+|`<br>`|Line break|
+|`<button>`|Tombol|
+|`<div>`|Section dalam HTML|
+|`<form>`|Untuk form|
+|`<h1> to <h6>`|Header 1 sampai 6|
+|`<html>`|Memberitahu kalo ini dokumen HTML|
+|`<img>`|Menampilkan gambar|
+|`<nav>`|Untuk navigation bar|
+|`<p>`|Untuk paragraph|
+|`<table>`|Membuat table|
+|`<td>`|Table Cell|
+|`<tr>`|Table Row|
+
+3. Jelaskan perbedaan antara margin dan padding. <br>
+   Margin digunakan untuk memberikan jarak di sekitar elemen, **di luar border** yang telah didefinisikan.<br>
+   Padding digunakan untuk memberikan jarak di sekitar elemen, **di dalam border** yang telah didefinisikan.<br>
+![1_L5bN2lty8lg5F50PTo4jtw](https://github.com/Abbilville/Shelf/assets/119837732/6b6b8c75-5044-4af1-8cda-4fee12cee202)
+
+4. Jelaskan perbedaan antara framework CSS Tailwind dan Bootstrap. Kapan sebaiknya kita menggunakan Bootstrap daripada Tailwind, dan sebaliknya? <br>
+
+|Aspek|Tailwind CSS|Bootstrap|
+|---|---|---|
+|Filosofi|Utility-first, konfigurasi kustom|Komprehensif, desain bawaan|
+|Kelengkapan Komponen|Terbatas, memerlukan pengembangan|Kaya akan komponen desain|
+|Desain Visual|Tergantung pada penggunaan kelas CSS|Desain bawaan yang konsisten|
+|Kustomisasi|Tinggi, mudah disesuaikan|Terbatas, memerlukan penyesuaian yang lebih besar|
+|Ukuran Bundle|Lebih kecil, hanya memuat apa yang diperlukan|Lebih besar karena banyak komponen|
+|Pengembangan Cepat|Lebih cepat karena kelas utilitas|Lebih lambat karena perlu menyesuaikan komponen|
+|Penggunaan untuk Proyek Kecil|Tidak efisien karena banyak kelas CSS|Efisien karena komponen bawaan|
+|Penggunaan untuk Proyek Besar|Efisien karena mudah disesuaikan|Tidak selalu efisien karena banyak komponen bawaan|
+|Komunitas dan Dukungan|Cepat berkembang, banyak sumber daya|Stabil, komunitas besar dan dokumentasi lengkap|
+
+#### Kapan sebaiknya menggunakan Bootstrap
+   + Bootstrap cocok digunakan jika ingin mengembangkan proyek dengan cepat dan memerlukan banyak komponen desain yang telah ada. <br>
+   + Jika memiliki anggaran waktu dan sumber daya yang terbatas, Bootstrap dapat menghemat waktu dengan desain bawaan yang responsif. <br>
+   + Bootstrap juga cocok untuk proyek yang memerlukan dukungan yang stabil dan memiliki dokumentasi yang lengkap. <br>
+
+#### Kapan sebaiknya menggunakan Tailwind
+   + Tailwind CSS merupakan pilihan yang baik jika ingin memiliki kontrol penuh atas desain dan tidak ingin terikat dengan gaya desain bawaan. <br>
+   + Cocok untuk proyek-proyek yang memerlukan desain yang sangat kustom dan fleksibel. <br>
+   + Jika ingin mengoptimalkan ukuran bundle (load time) proyek, Tailwind mungkin merupakan pilihan yang lebih baik karena hanya memuat apa yang diperlukan. <br>
+   + Tailwind cocok untuk developer yang memiliki pemahaman yang baik tentang CSS. <br>
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
+   + Langkah pertama seperti biasa jalankan `env\Scripts\activate.bat` <br>
+   + Lalu untuk mengimplementasikan css pada setiap file HTML secara external, buatlah folder baru pada `main` dan beri nama `static`. Buat juga folder baru yang bernama `css` untuk menampung file css dan saya juga buat folder `icon` untuk menampung file `.png` untuk icon pada page saya. <br>
+   + Lalu buat semua style yang sesuai dengan HTMLnya. Misal ingin memberi style pada file `main.html`, maka buat file `main.css` pada `main/static/css` dan mulailah memberi style pada file tersebut. <br>
+   + Untuk menghubungkan file css dengan html yang diinginkan tambahkan kode berikut di bagian atas html yang diinginkan: <br>
+   ```
+   ...
+   {% load static %}
+   <head>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+   </head>
+   ```
+   + Kode tersebut berfungsi untuk meload static yang mana akan mengarah ke folder static, dan stylesheet mengarah pada `css/main.css` pada folder static.
+   + Lakukan hal yang sama untuk page login, register, add_item, dan edit_item. <br>
+   + Jalankan `python manage.py runserver` untuk melihat perubahan pada html. <br>
 ---
 ## References
 1. [Django Architecture](https://data-flair.training/blogs/django-architecture/ "Data Flair")
@@ -339,8 +570,11 @@
 6. [HTTP Request Methods](https://www.w3schools.com/tags/ref_httpmethods.asp "W3Schools")
 7. [What’s the Relationship Between XML, JSON, HTML and the Internet?](https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet "DeltaXML")
 8. [XML Vs JSON: Which Is The Better Data Transfer Format?](https://openxmldeveloper.org/xml-vs-json-which-is-the-better-data-transfer-format/ "OpenXMLDeveloper")
-9. [Django UserCreationForm| Creating New User(https://www.javatpoint.com/django-usercreationform "javaTpoint")
+9. [Django UserCreationForm](https://www.javatpoint.com/django-usercreationform "javaTpoint")
 10. [User authentication in Django](https://docs.djangoproject.com/en/4.2/topics/auth/ "Django Documentation")
 11. [What are Cookies?](https://www.kaspersky.com/resource-center/definitions/cookies "Kapersky")
 12. [Django Cookies](https://www.javatpoint.com/django-cookie "javaTpoint")
 13. [What Are Cookies & How Do They Work?](https://blog.sucuri.net/2023/01/what-are-cookies-a-short-guide-to-managing-your-online-privacy.html "Sucuri blog")
+14. [CSS Selector](https://www.w3schools.com/css/css_selectors.asp "W3Schools")
+15. [HTML5 - Tags Reference](https://www.tutorialspoint.com/html5/html5_tags.htm "TutorialsPoint")
+16. [Tailwind CSS vs. Bootstrap: Who is More Relevant in the Current Scenario](https://www.zenesys.com/tailwind-css-vs-bootstrap "ZENESYS")
