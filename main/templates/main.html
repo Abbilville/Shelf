@@ -30,46 +30,129 @@
             <a class="nav-link active" aria-current="page" href="#">About Us</a>
           </li>
         </ul>
-        <a href="{% url 'main:create_item' %}"><button type="button" class="btn btn-outline-primary">Add Item</button></a>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 5px;">Add Item by AJAX</button>
+        <a href="{% url 'main:create_item' %}"><button type="button" class="btn btn-outline-primary" style="margin-right: 5px;">Add Item</button></a>
         <form class="d-flex" role="search">
           <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
+          <button class="btn btn-outline-success" type="submit" style="margin-right: 5px;">Search</button>
         </form>
-        <a href="{% url 'main:logout' %}">
-          <button type="button" class="btn btn-outline-danger">
-              Logout
-          </button>
-      </a>
+        <a href="{% url 'main:logout' %}"><button type="button" class="btn btn-outline-danger">Logout</button></a>
       </div>
     </div>
 </nav>
-<h4>{{message}}</h4>
-<div class="card-container">
-{% for item in items %}
-  <div class="card {% if forloop.last %}last-item{% endif %}" style="width: 18rem;">
-    <div class="card-body">
-      <div class="item-name">
-        <div class="left-content">
-          <h5 class="card-title">{{item.name}} | {{item.category}}</h5>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Item</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="right-content">
-          <a href="{% url 'main:delete_item' item.id %}">
-            <img src="{% static 'icon/delete_icon.png' %}" alt="Edit Icon">
-          </a>
+        <div class="modal-body">
+            <form id="form" onsubmit="return false;">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="name" class="col-form-label">Name:</label>
+                <input type="text" class="form-control" id="name" name="name"></input>
+              </div>
+              <div class="mb-3">
+                <label for="amount" class="col-form-label">Amount:</label>
+                <input type="number" class="form-control" id="amount" name="amount"></input>
+              </div>
+              <div class="mb-3">
+                <label for="description" class="col-form-label">Description:</label>
+                <textarea class="form-control" id="description" name="description"></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="price" class="col-form-label">Price:</label>
+                <input type="number" class="form-control" id="price" name="price"></input>
+              </div>
+              <div class="mb-3">
+                <label for="category" class="col-form-label">Category:</label>
+                <input type="text" class="form-control" id="category" name="category"></input>
+              </div>
+            </form>
         </div>
-      </div>
-      <h6 class="card-subtitle mb-2 text-body-secondary">{{item.amount}} | Rp{{item.price}}</h6>
-      <p class="card-text">{{item.description}}</p>
-      <div class="button-wrap">
-        <a href="{% url 'main:decrement_item' item.id %}"><button type="button" class="btn btn-outline-primary">-</button></a>
-        <a href="{% url 'main:edit_item' item.id %}"><button type="button" class="btn btn-outline-primary">Edit</button></a>
-        <a href="{% url 'main:increment_item' item.id %}"><button type="button" class="btn btn-outline-primary">+</button></a>
-      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Item</button>
+        </div>
     </div>
   </div>
-{% endfor %}
 </div>
 
-    <h5>Sesi terakhir login: {{ last_login }}</h5>
+<h4>{{message}}</h4>
+<div class="card-container">
+  {% for item in items %}
+    <div class="card {% if forloop.last %}last-item{% endif %}" style="width: 18rem;">
+      <div class="card-body">
+        <div class="item-name">
+          <div class="left-content">
+            <h5 class="card-title">{{item.name}} | {{item.category}}</h5>
+          </div>
+          <div class="right-content">
+            <a href="{% url 'main:delete_item' item.id %}">
+              <img src="{% static 'icon/delete_icon.png' %}" alt="Edit Icon">
+            </a>
+          </div>
+        </div>
+        <h6 class="card-subtitle mb-2 text-body-secondary">{{item.amount}} | Rp{{item.price}}</h6>
+        <p class="card-text">{{item.description}}</p>
+        <div class="button-wrap">
+          <a href="{% url 'main:decrement_item' item.id %}"><button type="button" class="btn btn-outline-primary">-</button></a>
+          <a href="{% url 'main:edit_item' item.id %}"><button type="button" class="btn btn-outline-primary">Edit</button></a>
+          <a href="{% url 'main:increment_item' item.id %}"><button type="button" class="btn btn-outline-primary">+</button></a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<table id="item_table">
+</table>
+
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+
+<script>
+  async function getItems() {
+      return fetch("{% url 'main:get_item_ajax' %}").then((res) => res.json())
+  }
+
+  async function refreshItems() {
+        document.getElementById("item_table").innerHTML = ""
+        const items = await getItems()
+        let htmlString = `<tr style="text-align: center;">
+            <th>Name</th>
+            <th>Amount</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Category</th>
+        </tr>`
+        items.forEach((item) => {
+            htmlString += `\n<tr>
+            <td>${item.fields.name}</td>
+            <td>${item.fields.amount}</td>
+            <td>${item.fields.description}</td>
+            <td>${item.fields.price}</td>
+            <td>${item.fields.category}</td>
+        </tr>` 
+        })
+        
+        document.getElementById("item_table").innerHTML = htmlString
+    }
+
+    refreshItems()
+
+    function addItems() {
+        fetch("{% url 'main:add_item_ajax' %}", {
+            method: "POST",
+            body: new FormData(document.querySelector('#form'))
+        }).then(refreshItems)
+
+        document.getElementById("form").reset()
+        return false
+    }
+
+    document.getElementById("button_add").onclick = addItems
+</script>
     
 {% endblock content %}

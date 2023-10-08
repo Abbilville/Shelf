@@ -1,6 +1,6 @@
 import datetime
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
 from django.core import serializers
 from django.urls import reverse
 from main.forms import ItemForm
@@ -10,6 +10,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 @login_required(login_url='/login')
 def show_main(request):
@@ -123,3 +124,27 @@ def edit_item(request, id):
 
     context = {'form': form}
     return render(request, "edit_item.html", context)
+    
+def get_item_ajax(request):
+    if request.method == 'GET':
+        product_item = Item.objects.filter(user=request.user)
+        return HttpResponse(serializers.serialize('json', product_item))
+    
+    return HttpResponseNotFound()
+
+@csrf_exempt
+def add_item_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        amount = request.POST.get("amount")
+        description = request.POST.get("description")
+        price = request.POST.get("price")
+        category = request.POST.get("category")
+        user = request.user
+
+        new_product = Item(name=name, amount=amount, description=description, price=price, category=category, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()

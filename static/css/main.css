@@ -1,0 +1,36 @@
+.card-container {
+    display:flex;
+}
+
+.card {
+    margin: 10px;
+}
+
+.last-item {
+    background-color: antiquewhite;
+}
+
+li {
+    padding-left: 10px;
+}
+
+P {
+    height: 100px;
+}
+
+.button-wrap {
+    padding-left: 55px;
+}
+
+.item-name {
+    display: flex;
+    align-items: center;
+  }
+  
+.left-content {
+flex: 1;
+}
+
+.right-content {
+margin-left: 10px;
+}
