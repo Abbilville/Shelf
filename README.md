@@ -3,7 +3,7 @@
 ---
 #### Creator: Abbilhaidar Farras Zulfikar
 #### Students ID: 2206026012
-#### Link: https://shelf.adaptable.app/main/
+#### Link: http://abbilhaidar-farras-tugas.pbp.cs.ui.ac.id
 ---
 ### Pertanyaan untuk Tugas 2
 1. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial). <br>
@@ -560,6 +560,164 @@
    + Kode tersebut berfungsi untuk meload static yang mana akan mengarah ke folder static, dan stylesheet mengarah pada `css/main.css` pada folder static.
    + Lakukan hal yang sama untuk page login, register, add_item, dan edit_item. <br>
    + Jalankan `python manage.py runserver` untuk melihat perubahan pada html. <br>
+---
+### Pertanyaan untuk Tugas 6
+1. Jelaskan perbedaan antara asynchronous programming dengan synchronous programming.<br>
+   Asynchronous Programming mengizinkan program untuk melanjutkan menjalankan tugas lain sementara operasi I/O atau tugas berkepanjangan sedang berlangsung. Ini meningkatkan responsivitas aplikasi dan efisiensi karena program tidak harus menunggu. Namun, asynchronous programming bisa lebih kompleks dalam desain dan memerlukan pemahaman yang lebih dalam tentang konsep seperti callback, promise, atau async/await.<br>
+   Synchornous Programming pada dasarnya menjalankan operasi I/O atau tugas satu per satu, mengharuskan program menunggu hingga satu operasi selesai sebelum melanjutkan ke yang berikutnya. Meskipun sederhana untuk dipahami, synchronous programming cenderung kurang responsif dan mungkin terasa lambat dalam situasi di mana ada I/O yang memakan waktu.<br>
+
+2. Dalam penerapan JavaScript dan AJAX, terdapat penerapan paradigma event-driven programming. Jelaskan maksud dari paradigma tersebut dan sebutkan salah satu contoh penerapannya pada tugas ini.<br>
+   Paradigma event-driven programming adalah pendekatan dalam pemrograman yang fokus pada pengelolaan dan pemrosesan peristiwa (events) yang terjadi dalam program atau aplikasi dan biasanya sering digunakan dalam JavaScript dan AJAX (Asynchronous JavaScript and XML). <br><br>
+   Pada tugas ini, event-driven programming diimplementasi menggunakan button. Button tersebut contohnya, increment item, decrement item, edit item, delete item, add item, login, logout, dll.<br>
+
+3. Jelaskan penerapan asynchronous programming pada AJAX.<br>
+   Dalam AJAX, asynchronous programming diimplementasikan melalui berbagai metode seperti penggunaan XMLHttpRequest dengan callback, penggunaan fetch API dengan promise, dan penggunaan fetch API dengan async/await. Callback digunakan untuk menjalankan kode secara asinkron, sehingga program tidak harus menunggu kode sebelumnya selesai sebelum menjalankan kode berikutnya; sebaliknya, kode berikutnya dapat dieksekusi segera setelah kode sebelumnya diinisialisasi, dan ketika kode tersebut selesai, fungsi callback akan dipanggil. Sementara itu, promise memiliki prinsip kerja yang mirip dengan callback, namun memberikan pendekatan yang lebih terstruktur dan mudah dimengerti. Terakhir, async/await mengubah kode asynchronous sehingga eksekusinya menyerupai kode synchronous, membuatnya lebih mudah dipahami dan dikelola dalam hal pembacaan dan pemeliharaan kode. <br>
+   
+4. Pada PBP kali ini, penerapan AJAX dilakukan dengan menggunakan Fetch API daripada library jQuery. Bandingkanlah kedua teknologi tersebut dan tuliskan pendapat kamu teknologi manakah yang lebih baik untuk digunakan.<br>
+
+|Fitur dan Aspek|Fetch API|jQuery|
+|---|---|---|
+|Kebutuhan Tambahan|Tidak memerlukan pustaka tambahan.|Memerlukan pustaka jQuery.|
+|Kompatibilitas dengan Browser|Mendukung sebagian besar browser modern.|Mendukung sebagian besar browser modern.|
+|Kemampuan Promises|Menggunakan Promise, yang memungkinkan penggunaan async/await.|Menggunakan callback.|
+|Kode yang Lebih Ringkas|Membutuhkan kode yang lebih banyak dan terstruktur saat menangani respons HTTP.|Dapat menggunakan shorthand method untuk melakukan AJAX dengan kode yang lebih ringkas.|
+|Pembuatan Permintaan HTTP|Memerlukan sedikit lebih banyak kode untuk membuat permintaan HTTP, termasuk menangani respons HTTP.|Mudah digunakan dengan metode `.ajax()` yang telah ada.|
+|Error Handling|Error handling memerlukan penanganan khusus dengan try-catch atau `.catch()` dalam Promise.|Mudah mengatasi kesalahan dengan metode `.fail()` atau callback error.|
+|Kelebihan|Lebih modern dan mendukung async/await. Lebih fleksibel untuk penggunaan terstruktur.|Lebih mudah digunakan untuk tugas sederhana dan dalam proyek-proyek yang lebih lama.|
+|Kerumitan|Lebih cocok untuk pengembangan aplikasi besar dan kompleks.|Lebih sederhana untuk pengembangan aplikasi kecil hingga menengah.|
+
+5. Jelaskan bagaimana cara kamu mengimplementasikan checklist di atas secara step-by-step (bukan hanya sekadar mengikuti tutorial).<br>
+   + Untuk mengimplementasikan AJAX GET, pertama saya membuat fungsi di `views.py` dengan nama `get_item_ajax`, implementasikan dengan cara seperti ini: <br>
+   ```python
+   def get_item_ajax(request):
+    if request.method == 'GET':
+        product_item = Item.objects.filter(user=request.user)
+        return HttpResponse(serializers.serialize('json', product_item))
+    
+    return HttpResponseNotFound()
+   ```
+   + Setelah itu sambungkan ke urls, lalu buat juga script di `main.html` untuk mengambil itemnya. <br>
+   ```javascript
+   <script>
+      async function getItems() {
+       return fetch("{% url 'main:get_item_ajax' %}").then((res) => res.json())
+      }
+      async function refreshItems() {
+       document.getElementById("item_table").innerHTML = ""
+       const items = await getItems()
+       let htmlString = `<div class="card-container">`
+       items.forEach((item, index) => {
+        const isLastItem = index === items.length - 1;
+        const cardClass = isLastItem ? 'card last-item' : 'card';
+        htmlString += `\n
+        <div class="${cardClass}" style="width: 18rem;">
+          <div class="card-body">
+            <div class="item-name">
+              <div class="left-content">
+                <h5 class="card-title">${item.fields.name} | ${item.fields.category}</h5>
+              </div>
+              <div class="right-content">
+                <a href="delete-item/${item.pk}/">
+                  <img src="{% static 'icon/delete_icon.png' %}" alt="Delete">
+                </a>
+              </div>
+            </div>
+            <h6 class="card-subtitle mb-2 text-body-secondary">${item.fields.amount} | Rp${item.fields.price}</h6>
+            <p class="card-text">${item.fields.description}</p>
+            <div class="button-wrap">
+              <a href="decrement-item/${item.pk}/"><button type="button" class="btn btn-outline-primary">-</button></a>
+              <a href="edit-item/${item.pk}/"><button type="button" class="btn btn-outline-primary">Edit</button></a>
+              <a href="increment-item/${item.pk}/"><button type="button" class="btn btn-outline-primary">+</button></a>
+            </div>
+          </div>
+        </div>` 
+       })
+       htmlString += `</div>`
+       
+       document.getElementById("item_table").innerHTML = htmlString
+     }
+
+     refreshItems()
+   </script>
+   ```
+   + Untuk mengimplementasikan AJAX POST, buat juga fungsi di `views.py` dengan nama `create-ajax`, implementasikan dengan cara seperti ini: <br>
+   ```python
+   @csrf_exempt
+   def add_item_ajax(request):
+       if request.method == 'POST':
+           name = request.POST.get("name")
+           amount = request.POST.get("amount")
+           description = request.POST.get("description")
+           price = request.POST.get("price")
+           category = request.POST.get("category")
+           user = request.user
+   
+           new_product = Item(name=name, amount=amount, description=description, price=price, category=category, user=user)
+           new_product.save()
+   
+           return HttpResponse(b"CREATED", status=201)
+       return HttpResponseNotFound()
+   ```
+   + Setelah itu sambungkan ke urls, lalu buat tambahkan function di script pada `main.html` untuk menambah item. <br>
+   ```javascript
+   <script>
+      ...
+      function addItems() {
+         fetch("{% url 'main:create_ajax' %}", {
+             method: "POST",
+             body: new FormData(document.querySelector('#form'))
+         }).then(refreshItems)
+   
+         document.getElementById("form").reset()
+         return false
+      }
+      document.getElementById("button_add").onclick = addItems
+   </script>
+   ```
+   + Setelah itu tambahkan tombol untuk memunculkan modal yang digunakan untuk menambahkan item, tambahkan pada `main.html` <br>
+   ```html
+   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" style="margin-right: 5px;">Add Item by AJAX</button>
+   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+       <div class="modal-content">
+           <div class="modal-header">
+               <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Item</h1>
+               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           <div class="modal-body">
+             <form id="form" onsubmit="return false;">
+               {% csrf_token %}
+               <div class="mb-3">
+                 <label for="name" class="col-form-label">Name:</label>
+                 <input type="text" class="form-control" id="name" name="name"></input>
+               </div>
+               <div class="mb-3">
+                 <label for="amount" class="col-form-label">Amount:</label>
+                 <input type="number" class="form-control" id="amount" name="amount"></input>
+               </div>
+               <div class="mb-3">
+                 <label for="price" class="col-form-label">Price:</label>
+                 <input type="number" class="form-control" id="price" name="price"></input>
+               </div>
+               <div class="mb-3">
+                 <label for="description" class="col-form-label">Description:</label>
+                 <textarea class="form-control" id="description" name="description"></textarea>
+               </div>
+               <div class="mb-3">
+                 <label for="category" class="col-form-label">Category:</label>
+                 <input type="text" class="form-control" id="category" name="category"></input>
+               </div>
+             </form>
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+           <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Item</button>
+         </div>
+       </div>
+     </div>
+   </div>
+   ```
+   + Langkah terakhir lakukanlan `python manage.py collectstatic` untuk mengumpulkan seluruh file static yang ada di project.
 ---
 ## References
 1. [Django Architecture](https://data-flair.training/blogs/django-architecture/ "Data Flair")
