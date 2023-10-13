@@ -149,10 +149,11 @@ def add_item_ajax(request):
 
     return HttpResponseNotFound()
 
-def delete_item_ajax(request, item_id):
+@csrf_exempt
+def delete_item_ajax(request, id):
     if request.method == 'DELETE':
-        item = Item.objects.get(pk=item_id, user=request.user)
+        item = Item.objects.get(pk=id)
         item.delete()
-        return HttpResponse(b"DELETED", status=201)
+        return HttpResponse(b"DELETED", status=200)
     
     return HttpResponseNotFound()

@@ -48,34 +48,34 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-            <form id="form" onsubmit="return false;">
-              {% csrf_token %}
-              <div class="mb-3">
-                <label for="name" class="col-form-label">Name:</label>
-                <input type="text" class="form-control" id="name" name="name"></input>
-              </div>
-              <div class="mb-3">
-                <label for="amount" class="col-form-label">Amount:</label>
-                <input type="number" class="form-control" id="amount" name="amount"></input>
-              </div>
-              <div class="mb-3">
-                <label for="price" class="col-form-label">Price:</label>
-                <input type="number" class="form-control" id="price" name="price"></input>
-              </div>
-              <div class="mb-3">
-                <label for="description" class="col-form-label">Description:</label>
-                <textarea class="form-control" id="description" name="description"></textarea>
-              </div>
-              <div class="mb-3">
-                <label for="category" class="col-form-label">Category:</label>
-                <input type="text" class="form-control" id="category" name="category"></input>
-              </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Item</button>
-        </div>
+          <form id="form" onsubmit="return false;">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="name" class="col-form-label">Name:</label>
+              <input type="text" class="form-control" id="name" name="name"></input>
+            </div>
+            <div class="mb-3">
+              <label for="amount" class="col-form-label">Amount:</label>
+              <input type="number" class="form-control" id="amount" name="amount"></input>
+            </div>
+            <div class="mb-3">
+              <label for="price" class="col-form-label">Price:</label>
+              <input type="number" class="form-control" id="price" name="price"></input>
+            </div>
+            <div class="mb-3">
+              <label for="description" class="col-form-label">Description:</label>
+              <textarea class="form-control" id="description" name="description"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="category" class="col-form-label">Category:</label>
+              <input type="text" class="form-control" id="category" name="category"></input>
+            </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Item</button>
+      </div>
     </div>
   </div>
 </div>
@@ -106,7 +106,7 @@
                 <h5 class="card-title">${item.fields.name} | ${item.fields.category}</h5>
               </div>
               <div class="right-content">
-                <a href="delete-item/${item.pk}">
+                <a href="delete-item/${item.pk}/">
                   <img src="{% static 'icon/delete_icon.png' %}" alt="Delete">
                 </a>
               </div>
@@ -114,9 +114,9 @@
             <h6 class="card-subtitle mb-2 text-body-secondary">${item.fields.amount} | Rp${item.fields.price}</h6>
             <p class="card-text">${item.fields.description}</p>
             <div class="button-wrap">
-              <a href="decrement-item/${item.pk}"><button type="button" class="btn btn-outline-primary">-</button></a>
-              <a href="edit-item/${item.pk}"><button type="button" class="btn btn-outline-primary">Edit</button></a>
-              <a href="increment-item/${item.pk}"><button type="button" class="btn btn-outline-primary">+</button></a>
+              <a href="decrement-item/${item.pk}/"><button type="button" class="btn btn-outline-primary">-</button></a>
+              <a href="edit-item/${item.pk}/"><button type="button" class="btn btn-outline-primary">Edit</button></a>
+              <a href="increment-item/${item.pk}/"><button type="button" class="btn btn-outline-primary">+</button></a>
             </div>
           </div>
         </div>` 
@@ -129,7 +129,7 @@
   refreshItems()
 
   function addItems() {
-      fetch("{% url 'main:add_item_ajax' %}", {
+      fetch("{% url 'main:create_ajax' %}", {
           method: "POST",
           body: new FormData(document.querySelector('#form'))
       }).then(refreshItems)
@@ -139,7 +139,8 @@
   }
 
   function deleteItem(itemId) {
-      fetch(`delete-item-ajax/${itemId}`, {
+      alert("Hello World!");
+      fetch(`delete_item_ajax/${itemId}/`, {
           method: "DELETE",
           
       }).then(refreshItems)
@@ -147,6 +148,7 @@
   }
 
   document.getElementById("button_add").onclick = addItems
+  document.getElementById("button_delete").onclick = deleteItem(document.getElementById("button_delete").getAttribute("data-item-id"))
 </script>
     
 {% endblock content %}

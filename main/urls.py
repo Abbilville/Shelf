@@ -17,9 +17,9 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('increment-item/<str:id>/', increment_item, name='increment_item'),
     path('decrement-item/<str:id>/', decrement_item, name='decrement_item'),
-    path('delete-item/<str:id>', delete_item, name='delete_item'),
-    path('edit-item/<str:id>', edit_item, name='edit_item'),
+    path('delete-item/<str:id>/', delete_item, name='delete_item'),
+    path('edit-item/<str:id>/', edit_item, name='edit_item'),
     path('get-item/', get_item_ajax, name='get_item_ajax'),
-    path('create-ajax/', add_item_ajax, name='add_item_ajax'),
+    path('create-ajax/', add_item_ajax, name='create_ajax'),
     path('delete-item-ajax/<str:id>/', delete_item_ajax, name='delete_item_ajax'),
 ]
