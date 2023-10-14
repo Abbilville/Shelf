@@ -21,7 +21,7 @@ urlpatterns = [
     path('edit-item/<str:id>/', edit_item, name='edit_item'),
     path('get-item/', get_item_ajax, name='get_item_ajax'),
     path('create-ajax/', add_item_ajax, name='create_ajax'),
-    path('increment-ajax/<str:id>/', increment_ajax, name='increment_ajax'),
-    path('decrement-ajax/<str:id>/', decrement_ajax, name='decrement_ajax'),
+    path('increment-item-ajax/<str:id>/', increment_ajax, name='increment_item_ajax'),
+    path('decrement-item-ajax/<str:id>/', decrement_ajax, name='decrement_item_ajax'),
     path('delete-item-ajax/<str:id>/', delete_item_ajax, name='delete_item_ajax'),
 ]
