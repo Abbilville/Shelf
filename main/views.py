@@ -29,13 +29,14 @@ def show_main(request):
 
     return render(request, "main.html", context)
 
+@login_required(login_url='/login')
 def create_item(request):
     form = ItemForm(request.POST or None)
 
     if form.is_valid() and request.method == "POST":
-        product = form.save(commit=False)
-        product.user = request.user
-        product.save()
+        item = form.save(commit=False)
+        item.user = request.user
+        item.save()
         return HttpResponseRedirect(reverse('main:show_main'))
 
     context = {'form': form}
@@ -150,9 +151,32 @@ def add_item_ajax(request):
     return HttpResponseNotFound()
 
 @csrf_exempt
+def increment_ajax(request, pk):
+    if request.method == 'POST':
+        item = Item.objects.get(pk=pk, user=request.user)
+        item.amount += 1
+        item.save()
+        return HttpResponse(b"OK", status=200)
+    
+    return HttpResponseNotFound()
+
+@csrf_exempt 
+def decrement_ajax(request, pk):
+    if request.method == 'POST':
+        item = Item.objects.get(pk=pk, user=request.user)
+        if (item.amount > 0):
+            item.amount -= 1
+            item.save()
+        else:
+            item.delete()
+        return HttpResponse(b"OK", status=200)
+    
+    return HttpResponseNotFound()
+
+@csrf_exempt
 def delete_item_ajax(request, id):
     if request.method == 'DELETE':
-        item = Item.objects.get(pk=id)
+        item = Item.objects.get(pk=id, )
         item.delete()
         return HttpResponse(b"DELETED", status=200)
     
