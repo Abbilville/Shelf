@@ -112,14 +112,11 @@ def delete_item(request, id):
     return HttpResponseRedirect(reverse('main:show_main'))
 
 def edit_item(request, id):
-    # Get product berdasarkan ID
     product = Item.objects.get(pk = id)
 
-    # Set product sebagai instance dari form
     form = ItemForm(request.POST or None, instance=product)
 
     if form.is_valid() and request.method == "POST":
-        # Simpan form dan kembali ke halaman awal
         form.save()
         return HttpResponseRedirect(reverse('main:show_main'))
 
@@ -151,9 +148,9 @@ def add_item_ajax(request):
     return HttpResponseNotFound()
 
 @csrf_exempt
-def increment_ajax(request, pk):
+def increment_ajax(request, id):
     if request.method == 'POST':
-        item = Item.objects.get(pk=pk, user=request.user)
+        item = Item.objects.get(pk=id, user=request.user)
         item.amount += 1
         item.save()
         return HttpResponse(b"OK", status=200)
@@ -161,9 +158,9 @@ def increment_ajax(request, pk):
     return HttpResponseNotFound()
 
 @csrf_exempt 
-def decrement_ajax(request, pk):
+def decrement_ajax(request, id):
     if request.method == 'POST':
-        item = Item.objects.get(pk=pk, user=request.user)
+        item = Item.objects.get(pk=id, user=request.user)
         if (item.amount > 0):
             item.amount -= 1
             item.save()
@@ -176,7 +173,7 @@ def decrement_ajax(request, pk):
 @csrf_exempt
 def delete_item_ajax(request, id):
     if request.method == 'DELETE':
-        item = Item.objects.get(pk=id, )
+        item = Item.objects.get(pk=id, user=request.user)
         item.delete()
         return HttpResponse(b"DELETED", status=200)
     
