@@ -106,19 +106,17 @@
                 <h5 class="card-title">${item.fields.name} | ${item.fields.category}</h5>
               </div>
               <div class="right-content">
-                <a href="delete-item/${item.pk}/">
-                <button style="background-color: transparent;border: none" method="DELETE" onclick="decrementAJAX(${item.pk})">
+                <button style="background-color: transparent;border: none" method="DELETE" onclick="deleteItem(${item.pk})">
                   <img src="{% static 'icon/delete_icon.png' %}" alt="Delete">
                 </button>
-                </a>
               </div>
             </div>
             <h6 class="card-subtitle mb-2 text-body-secondary">${item.fields.amount} | Rp${item.fields.price}</h6>
             <p class="card-text">${item.fields.description}</p>
             <div class="button-wrap">
-              <a href="decrement-item/${item.pk}/"><button type="button" class="btn btn-outline-primary" method="POST" onclick="decrementAJAX(${item.pk})">-</button></a>
+              <button type="button" class="btn btn-outline-primary" method="POST" onclick="decrementAJAX(${item.pk})">-</button>
               <a href="edit-item/${item.pk}/"><button type="button" class="btn btn-outline-primary">Edit</button></a>
-              <a href="increment-item/${item.pk}/"><button type="button" class="btn btn-outline-primary" method="POST" onclick="incrementAJAX(${item.pk})">+</button></a>
+              <button type="button" class="btn btn-outline-primary" method="POST" onclick="incrementAJAX(${item.pk})">+</button>
             </div>
           </div>
         </div>` 
@@ -157,7 +155,7 @@
   }
 
   function deleteItem(itemId) {
-      fetch(`delete_item_ajax/${itemId}/`, {
+      fetch(`delete-item-ajax/${itemId}/`, {
           method: "DELETE",
       }).then(refreshItems)
       
