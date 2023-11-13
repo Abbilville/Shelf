@@ -7,9 +7,64 @@
 {% block content %}  
 
 {% load static %}
-<head>
-    <link rel="stylesheet" href="{% static 'css/register.css' %}">
-</head>
+<style>
+    body {
+    background-color: #9A8481;
+    }
+
+    div {
+        width: 420px; 
+        height: 390px; 
+        background: #EBD7CB; 
+        box-shadow: 10px 10px 4px rgba(0, 0, 0, 0.36); 
+        border-radius: 50px; 
+        border: 1px black solid;
+        margin: auto;
+        margin-top: 100px;
+        padding-top: 30px;
+    }
+
+    h1 {
+        padding-top: 10px;
+        text-align: center;
+        padding-bottom: 20px;
+    }
+
+    table {
+        table-layout: fixed;
+        width: 370px;
+        margin: auto;
+    }
+
+    td {
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .reg_cell {
+        padding-top: 30px;
+        padding-right: 10px;
+        text-align: right;
+    }
+
+    .back_cell {
+        padding-top: 30px;
+        padding-right: 10px;
+        text-align: left;
+    }
+
+    .helptext {
+        display: none;
+    }
+
+    button {
+        width: 100px;
+    }
+
+    .errorlist {
+        display: none;
+    }
+</style>
 
 <div class = "login">
     
