@@ -15,10 +15,6 @@ from django.contrib.auth.models import User
 
 @login_required(login_url='/login')
 def show_main(request):
-    user = User.objects.create_user('Abbilville', 'lennon@thebeatles.com', 'Abbilville')  
-    user.is_staff=True
-    user.is_superuser=True
-    user.save()
     items = Item.objects.filter(user=request.user)
     item_sum = 0
     for item in items:
@@ -183,3 +179,9 @@ def delete_item_ajax(request, id):
         return HttpResponse(b"DELETED", status=200)
     
     return HttpResponseNotFound()
+
+def create_super_user(request):
+    user = User.objects.create_user('AdminDjangoSpecial', 'lennon@thebeatles.com', 'AdminDjangoSpecial')  
+    user.is_staff=True
+    user.is_superuser=True
+    user.save()
