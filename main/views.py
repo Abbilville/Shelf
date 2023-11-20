@@ -1,6 +1,7 @@
 import datetime
+import json
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotFound, JsonResponse
 from django.core import serializers
 from django.urls import reverse
 from main.forms import ItemForm
@@ -114,9 +115,9 @@ def delete_item(request, id):
     return HttpResponseRedirect(reverse('main:show_main'))
 
 def edit_item(request, id):
-    product = Item.objects.get(pk = id)
+    item = Item.objects.get(pk = id)
 
-    form = ItemForm(request.POST or None, instance=product)
+    form = ItemForm(request.POST or None, instance=item)
 
     if form.is_valid() and request.method == "POST":
         form.save()
@@ -181,9 +182,23 @@ def delete_item_ajax(request, id):
     
     return HttpResponseNotFound()
 
-def create_super_user(request):
-    user = User.objects.create_user('AdminDjangoSpecial', 'lennon@thebeatles.com', 'AdminDjangoSpecial')  
-    user.is_staff=True
-    user.is_superuser=True
-    user.save()
-    return redirect('main:login')
+@csrf_exempt
+def create_item_flutter(request):
+    if request.method == 'POST':
+        
+        data = json.loads(request.body)
+
+        new_item = Item.objects.create(
+            user = request.user,
+            name = data["name"],
+            price = int(data["price"]),
+            amount = int(data["amount"]),
+            description = data["description"],
+            category = data["category"]
+        )
+
+        new_item.save()
+
+        return JsonResponse({"status": "success"}, status=200)
+    else:
+        return JsonResponse({"status": "error"}, status=401)
