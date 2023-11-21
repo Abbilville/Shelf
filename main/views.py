@@ -46,11 +46,11 @@ def create_item(request):
     return render(request, "create_item.html", context)
 
 def show_xml(request):
-    data = Item.objects.all()
+    data = Item.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
 
 def show_json(request):
-    data = Item.objects.all()
+    data = Item.objects.filter(user=request.user)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 
 def show_xml_by_id(request, id):
