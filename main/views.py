@@ -17,7 +17,6 @@ from django.contrib.auth.models import User
 @login_required(login_url='/login')
 def show_main(request):
     items = Item.objects.filter(user=request.user)
-    items = Item.objects.all()
     item_sum = 0
     for item in items:
         item_sum += item.amount
@@ -32,7 +31,8 @@ def show_main(request):
 
     return render(request, "main.html", context)
 
-@login_required(login_url='/login')
+@csrf_exempt
+@login_required(login_url='/login') 
 def create_item(request):
     form = ItemForm(request.POST or None)
 
